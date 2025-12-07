@@ -50,7 +50,7 @@ app.use(morgan("common"));
 //Public Route 
 //Simple public test route to verify the server is running. Remoove later?????? Mayhaps???
 app.get("/", (req, res) => {
-  res.send("This is home route");
+  res.send("Welcome to the home route. Glad you are here.");
 });
 
 //Protected and modular routes
