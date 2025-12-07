@@ -1,0 +1,21 @@
+"scripts": {
+    // Deletes the "dist" folder and compiles TypeScript into JavaScript
+    "build": "rimraf dist && tsc",
+
+    // Builds the project and then runs the compiled JavaScript from /dist
+    "start": "npm run build && node dist/index.js",
+
+    // Runs TypeScript in watch mode and auto-restarts the server on changes
+    // "concurrently" runs both commands at the same time
+    "dev": "npm run build && concurrently \"npx tsc -w\" \"nodemon --exec ts-node src/index.ts\"",
+
+    // Executes the Prisma seed file to populate the database with initial data
+    "seed": "ts-node prisma/seed.ts",
+
+    // Generates the Prisma Client based on the schema
+    "prisma:generate": "prisma generate",
+
+    // After generating Prisma client types, copies the generated .d.ts file
+    // into a frontend /client folder so the frontend can use Prisma types
+    "postpridmsa:generate": "shx cp -r node_modules/.prisma/client/index.d.ts ../client/src/types/prismaTypes.d.ts"
+}

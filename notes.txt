@@ -1,0 +1,713 @@
+Tasks:
+Installations ⭐
+Frontend Installations and Setup ⭐
+Landing Page ⭐
+Backend Installations and Setup ⭐
+AWS Cognito Auth
+Settings Page
+Properties, Leases, Applications Backend
+Search Filters
+Mapbox
+Listings Pages
+Properties Frontend
+Applications Frontend
+Cleanup
+AWS Intro
+AWS Budget
+AWS Deleting
+AWS Architecture
+AWS Networking
+AWS EC2
+AWS RDS
+AWS Amplify
+AWS Api Gateway
+AWS S3
+
++----------------------------------------------------+
+|  Installations & Frontend Installations and Setup  |
++----------------------------------------------------+
+10:48pm 26 Nov 2025
+
+Download Node.js
+Install npx
+npx create-next-app@latest
+project name: lucky-star-estates
+TypeScripts: Yes
+ESLint: Yes
+Tailwind CSS: Yes
+src/ directory: Yes
+App Router: Yes
+Turbopack: No (Unfortunately Turbopack is not optional. I cannot disable it.) *
+Import alias: No
+
+change to tailwind v.3 in lucky-star-estates
+npm uninstall tailwindcss
+npm install -D tailwindcss@3 postcss autoprefixer
+npx tailwindcss init -p
+
+
+Renamed lucky-star-estates to client: This is the frontend.
+Updated exports for client (hopefully this does not break anything) *
+
+vscode
+Install es7+ extension by dsznajder
+Prettier - Code formatter extension by Prettier
+
+Chrome web store
+Pesticide for Chrome
+Redux DevTools
+
+npm i lucide-react dotenv date-fns react-filepond filepond filepond-plugin-image-exif-orientation filepond-plugin-image-preview framer-motion mapbox-gl lodash react-hook-form zod @hookform/resolvers
+npm i -D @types/node @types/uuid
+
+
+//Home
+//client/src/app/page.tsx
+
+export default function HomePage() {
+  return (
+    <main>
+      <h1>Welcome to the Home Page</h1>
+    </main>
+  );
+}
+
+vscode extensions
+tailwind css intellisense by tailwind labs
+Tailwind Documentation by alfredbirk
+
+npx shadcn@latest init -d
+(tutorial uses --legacy-peer-deps but was not an option for me hopefully not an issue) *
+
+shadcn components
+npx shadcn@latest add avatar badge button card checkbox command dialog dropdown-menu form input label navigation-menu radio-group select separator sheet sidebar skeleton slider sonner switch table tabs textarea tooltip
+npm i react-redux @reduxjs/toolkit dotenv 
+(tutorial used --legacy-peer-deps I did not. Hopefully is fine) * 
+
+Downloaded assests make sure to replace them with new assets later. 
+Added folder with all to root.
+Added globals.css to client/src/app
+Added tailwind.config.ts to client/
+Added tsconfig.json
+Added the folders hooks, lib, state, and types to src/
+Added public to client/
+
+fixed error saying tailwindcss-animate missing with following
+npm i tailwindcss-animate
+
+So far this runs
+Made a copy of folder just in case.
+
+created providers.tsx in client/src/app
+
+List of files worked on:
+page.tsx in client/src/app/page.tsx
+layout.tsx
+providers.tsx
+
++----------------+
+|  Landing Page  |
++----------------+
+12:39am - 1:03am 27 Nov 2025
+
+Create (nondashboard) folder in client/src/app 
+Create landing-page folder in client/src/app/(nondashboard)
+Create page.tsx in client/src/app/(nondashboard)/landing-page
+rafc for boilerplate in client/src/app/(nondashboard)/landing-page/page.tsx
+Create layout.tsx in client/src/app/(nondashboard)/landing-page
+rafc for boilerplate in client/src/app/(nondashboard)/landing-page/layout.tsx
+
+Before getting into coding layout I am gonna save a copy of this. ver 0.2
+
+Left off on 31:39 of tutorial
+
+11:33pm - 1pm 27 Nov 2025
+worked on client/src/app/(nondashboard)/layout.tsx
+Created Navbar.tsx in client/src/compoents/
+- Worked on Navbar component
+Created HeroSection.tsx in client/src/app/(nondashboard)/landing-page
+
+Left off at 41:33
+
+2pm - 4:46pm 27 Nov 2025
+Worked on layout.tsx
+Worked on HeroSection
+Worked on constants.ts
+Worked on page.tsx
+Worked on layout.tsx
+Created FeaturesSection.tsx at client/src/app/(nondashboard)/landing-page
+
+Left off at 52:20 (Why is this taking so long?)
+
+7pm - 8:21pm 27 Nov 2025
+worked on FeaturesSection.tsx
+changed splash page
+https://pdimagearchive.org/images/fd73a633-ae34-4fd4-ac91-b65f25bc763f/
+Maybe change the logo. If I have time draw a new one. If not find a public domain one.
+
+7:32pm - 28 Nov 2025
+Created DiscoverSection.tsx in client/src/app/(nondashboard)/landing-page
+Changed splash page again
+https://commons.wikimedia.org/wiki/File:Carson_Mansion_Eureka_California.jpg
+Star Icon 
+https://www.freepik.com/icon/star_6134390#fromView=search&page=1&position=65&uuid=0b303ac4-865e-481f-a0c4-7ea21a26ad78
+Created CallToActionSection.tsx in client/src/app/(nondashboard)/landing-page
+https://negativespace.co/blue-night-sky/
+https://www.goodfreephotos.com/public-domain-images/blue-night-sky-filled-with-stars.jpg.php?utm_source=chatgpt.com
+Created FooterSection.tsx in client/src/app/(nondashboard)/landing-page
+npm i @fortawesome/fontawesome-svg-core @fortawesome/free-brands-svg-icons @fortawesome/react-fontawesome
+
+added the following to app/layout.tsx
+import { Josefin_Sans } from 'next/font/google'
+
+const josefin = Josefin_Sans({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-josefin',
+})
+
+
++---------------------------------+
+| Backend Installations and Setup |
++---------------------------------+
+Made backend folder
+Install PostgreSQL 
+Install PostGIS
+Install pgadmin
+cd backend 
+npm init -y
+npm i express body-parser cors dotenv helmet morgan jsonwebtoken multer uuid axios @terraformer/wkt @aws-sdk/client-s3 @aws-sdk/lib-storage
+npm i -D rimraf concurrently nodemon shx ts-node typescript @types/cors @types/morgan @types/jsonwebtoken @types/multer @types/terraformer__wkt @types/uuid
+npx tsc --init
+Edited backend/tsconfig.json
+Created src folder in backend
+Created index.ts in backend/src Entry point for entire Application
+Edited package.json
+Created .env in backend
+npm i prisma @prisma/client
+- This has a lot of vulnerabilities going to uninstall and try a fix
+npm install -g prisma
+npm install @prisma/client
+- Hopefully this doesnt break anything
+npx prisma init
+Added new prisma folder
+had errors with @prisma/client
+did the following fix
+npm uninstall prisma @prisma/client
+npm install prisma@5.15.0 @prisma/client@5.15.0
+npx prisma generate
+Now I have different errors... :/
+Maybe fixed them hopefully. 
+
+seedData folder has mock data 
+
+Added Prisma by prisma.io extension
+
+Not fixed tried following fix.
+npm install prisma@6 @prisma/client@6
+
+edited package.json added notes for changes and how they work in packagejsonnotes.txt
+ran npm run prisma:generate
+creates index.d.ts in frontend/src/types This step would have to happen again if I change this to a car platform
+npx prisma migrate dev --name init
+this initialises our migrations
+prisma 7 was still installed globally and caused issues
+delete prisma 7 globally
+
+npx prisma migrate reset
+npx prisma migrate dev --name init
+creates migrations solver in backend/prisma
+npm run seed
+encountered error while doing so
+edited seed.ts to allow npm run seed to work
+npm run seed
+added information to database
+
+
+In backend if I want to change to a Used Car platform need to change
+schema.prisma to reflect that.
+Theres other stuff I need to do too.
+
++------------------+
+| AWS Cognito Auth |
++------------------+
+
+sign into aws
+go to Cognito
+create user pool
+SPA 
+Name your Application: lucky-star-estates_congnito-appclient
+email for required attributes for sign-Up
+create
+check the user pool 
+rename it lucky-star-estates_congnito-userpool
+app client
+go to sign-Up
+add custom attribute
+role string create
+need user pool id and app clients id
+
+install Amplify
+https://ui.docs.amplify.aws/react/getting-started/installation
+Authenticator Component
+https://ui.docs.amplify.aws/react/connected-components/authenticator
+
+Created folder (authenticator) in frontend/src/app
+Created file authenticatorProvider.tsx in frontend/src/app/(authenticator)
+
+in frontend
+npm i aws-amplify @aws-amplify/ui-react --legacy-peer-deps
+
+Modified providers.tsx
+
+had errors did the following fix 
+npm i aws-amplify@latest @aws-amplify/ui-react@latest
+
+Modified frontend/src/state/api.ts
+api.ts will need to be edited if i get around to the car idea
+
+Created prismaTypes.d.ts in frontend/src/types
+This file would need to be edited if we make a car platform...maybe...depending
+
+Created middleware folder in backend/src
+Created authorizationMiddleware.ts in backend/src/middleware
+Need to change this later to do it via Cognito
+Created folder routes in backend/src
+Created tenantRoutes.ts in backend/src/routes
+
+Ran into so many errors. Had to completely change tsconfig.json and package.json files
+Ran this rm -rf node_modules dist
+Then npm install
+Hopefully the errors wont come back 
+
+Created controllers folder in backend/src
+tenantControllers.ts folder in backend/src/controllers
+Would need to change this of I do car idea
+Created managerRoutes.ts in src/routes
+Would need to change this if I do car idea
+managerControllers.ts folder in backend/src/controllers
+Would need to change this if I do car idea
+Maybe Ill make this into a silly little haunted house rental thing and add arg like elements to it instead idk
+
+Edited utils.ts in frontend/src/lib
+Edited layout in frontend/src/app/(nondashboard)/layout.tsx
+Edited index.ts in frontend/src/state/index.ts
+Edited navigationBar.tsx in frontend/src/components
+
+Created folder (dashboard) in frontend/src/app
+Created layout.tsx in frontend/src/app/(dashboard)
+Created AppSidebar.tsx in frontend/src/components/
+Created the folders managers and tenants in frontend/src/app/(dashboard)
+Created folder favorites in frontend/src/app/(dashboard)/tenants
+Created page.tsx in frontend/src/app/(dashboard)/tenants/favorites
+(Getting lazy with notes just gonna copy relitive path from now on)
+Created frontend/src/components/Card.tsx
+Created frontend/src/components/Header.tsx
+Created frontend/src/components/Loading.tsx
+
+Edited frontend/src/app/(nondashboard)/layout.tsx
+
++---------------+
+| Settings Page |
++---------------+
+Tenant Settings will only change in local database but not Cognito 
+(Will likely need to add this functionality if have time)
+
+Edited backend/src/routes/tenantRoutes.ts
+Edited backend/src/controllers/tenantControllers.ts
+Edited backend/src/routes/managerRoutes.ts
+Edited backend/src/controllers/managerControllers.ts
+
+Created frontend/src/components/SettingsForm.tsx
+Reviewed frontend/src/lib/schemas.ts
+
+Had errors ran npx shadcn@latest add form
+
+Created frontend/src/components/FormField.tsx
+Created frontend/src/app/(dashboard)/tenants/settings
+Created frontend/src/app/(dashboard)/tenants/settings/page.tsx
+Created frontend/src/app/(dashboard)/managers/settings
+Created frontend/src/app/(dashboard)/managers/settings/page.tsx
+
+
++------------------------------------------+
+| Properties, Leases, Applications Backend |
++------------------------------------------+
+We will be using server side filtering
+
+Created backend/src/routes/propertyRoutes.ts
+Created backend/src/controllers/propertyControllers.ts
+
+Edited backend/src/controllers/managerControllers.ts
+Edited backend/src/controllers/managerControllers.ts
+Edited backend/src/routes/tenantRoutes.ts
+Edited backend/src/routes/managerRoutes.ts
+Edited backend/src/index.ts
+
+Created backend/src/controllers/leaseControllers.ts
+Created backend/src/routes/leaseRoutes.ts
+Created backend/src/controllers/applicationControllers.ts
+Created backend/src/routes/applicationRoutes.ts
+
++----------------+
+| Search Filters |
++----------------+
+Created frontend/src/app/(nondashboard)/search
+Created frontend/src/app/(nondashboard)/search/page.tsx
+
+Edited frontend/src/state/index.ts
+
+Created frontend/src/app/(nondashboard)/search/FiltersBar.tsx
+Created frontend/src/app/(nondashboard)/search/FiltersFull.tsx
+
++--------+
+| Mapbox |
++--------+
+Sign up for mapbox
+Styles > New Styles > Find inspiration in style gallery
+Pick one and add to your studio
+Using Mapbx GL 
+
+Created frontend/src/app/(nondashboard)/search/Map.tsx
+
++----------------+
+| Listings Pages |
++----------------+
+Edited frontend/src/state/api.ts
+
+Created frontend/src/app/(nondashboard)/search/Listings.tsx
+Created frontend/src/components/Card.tsx
+
+Edited frontend/next.config.ts
+
+Created frontend/src/components/CardCompact.tsx
+Created frontend/src/app/(nondashboard)/search/[id]
+Created frontend/src/app/(nondashboard)/search/[id]/page.tsx
+Created frontend/src/app/(nondashboard)/search/[id]/ImagePreviews.tsx
+
+Code appears to be extremely limited
+AWS is used as the database for users only
+Information regarding the apartments exists in local database so far
+Images for homes exist in a folder in the code's library (If I had more time I would change this)
+It's probably fine I don't remember that as a requirement in the assignment
+
+Created frontend/src/app/(nondashboard)/search/[id]/PropertyOverview.tsx
+Created frontend/src/app/(nondashboard)/search/[id]/PropertyDetails.tsx
+Created frontend/src/app/(nondashboard)/search/[id]/PropertyLocation.tsx
+Created frontend/src/app/(nondashboard)/search/[id]/ContactWidget.tsx
+
++---------------------+
+| Properties Frontend |
++---------------------+
+Had issues with landing-page not loading when signed-out 
+which means the landing-page is protected with Auth but it should be visible to everyone
+Tried several fixes but they broke the whole app
+Rolled back to a previous version in my backups folder which is this one backup 0.7
+Made it so the page auto redirects to login when someone opens the site
+I don't have time to try to figure out the issue
+I also made it so when someone is logged in they redirect to the landing-page
+Now I gotta do properties frontend and applications frontend tonight
+
+Tenants POV
+Created frontend/src/app/(dashboard)/tenants/favorites
+Created frontend/src/app/(dashboard)/tenants/favorites/page.tsx
+Created frontend/src/components/Header.tsx
+Created frontend/src/components/Loading.tsx
+Created frontend/src/app/(dashboard)/tenants/residences
+Created frontend/src/app/(dashboard)/tenants/residences/page.tsx
+Created frontend/src/app/(dashboard)/tenants/applications
+Created frontend/src/app/(dashboard)/tenants/applications/page.tsx
+Created frontend/src/components/ApplicationCard.tsx
+
+Edited frontend/src/state/api.ts
+
+Manager POV
+Created frontend/src/app/(dashboard)/managers/properties
+Created frontend/src/app/(dashboard)/managers/properties/page.tsx
+Created frontend/src/app/(dashboard)/managers/properties/[id]
+Created frontend/src/app/(dashboard)/managers/properties/[id]/page.tsx
+
+Ran into a lot of errors 
+Trying this fix
+npm install react-hook-form@7.49.3 @hookform/resolvers@3.3.1 zod@3.23.8
+Didn't work
+Trying new fix
+God it was going so smoothly too 
+I hate this
+npm remove react-hook-form @hookform/resolvers zod
+rm -rf node_modules package-lock.json
+npm install
+npm install react-hook-form@latest zod@latest @hookform/resolvers@latest
+Well I just broke everything
+npm remove react-hook-form @hookform/resolvers zod
+npm install react-hook-form@7.53.2 @hookform/resolvers@3.3.3 zod@3.23.8
+rm -rf node_modules package-lock.json
+npm install
+
+This fixed it
+1. npm remove react-hook-form @hookform/resolvers zod
+2. rm -rf node_modules package-lock.json
+3. npm install
+4. npm install react-hook-form@7.53.2 @hookform/resolvers@3.3.3 zod@3.23.8
+
+Created frontend/src/app/(dashboard)/managers/newproperty
+Created frontend/src/app/(dashboard)/managers/newproperty/page.tsx
+
+
+
++-----------------------+
+| Applications Frontend |
++-----------------------+
+Created frontend/src/app/(dashboard)/managers/applications
+Created frontend/src/app/(dashboard)/managers/applications/page.tsx
+Created frontend/src/components/ApplicationCard.tsx
+frontend/src/app/(nondashboard)/search/[id]/ApplicationModal.tsx
+
+Edited frontend/src/state/api.ts
+
++---------+
+| Cleanup |
++---------+
+Edited frontend/src/app/(nondashboard)/landing-page/WelcomeBanner.tsx
+
+Edited frontend/src/app/layout.tsx
+
+Edited backend/src/index.ts
+
+Created backend/ecosystem.config.js
+
+Had some errors 
+Tried this 
+npm install -D @typescript-eslint/eslint-plugin @typescript-eslint/parser
+There is a remote code execution vulnerability in this.
+Tried this fix
+npm install next@16.0.7
+That seems to have fixed the vulnerability but does the code still run?
+Seems to be working
+
+npm run build
+ran with no issues
+
+
++-----+
+| AWS |
++-----+
+Finally at AWS THANK GOD!
+
+AWS Architecture ******IMPORTANT********
+Make sure to make graph or visual for the architecture
+VPC is the API Gateway
+EC2 has backend 
+There are 2 private subnets needed for RDS for different availability zones 
+
+
+AWS Networking
+--------------
+Go to VPC
+us-west-2
+Create VPC
+- VPC only
+- lucky_star_vpc
+- IPv4 CIDR manual input
+- 10.0.0.0/16
+- create vpc
+Create subnet (in our VPC)
+subnet 1 of 2
+- Select the VPC
+- lucky-star-public-subnet-1
+- us-west-2
+- 10.0.0.0/24
+subnet 2 of 2
+- lucky-star-private-subnet-1
+- us-west-2
+- 10.0.0.0/16
+- 10.0.1.0/24
+add subnet 3 of 3
+- lucky-star-private-subnet-2
+- us-west-2b
+- 10.0.0.0/16
+- 10.0.2.0/24
+Create internet Gateway
+- lucky-star-internet-gateway
+- attach to our vpc
+Create Route Table
+- lucky-star-public-route-table-1
+- select VPC
+- create route table
+Edit subnet associations
+- associate the public subnet with the public round table
+Create Route Table
+- lucky-star-private-route-table-1
+- select VPC
+- create route table
+Edit subnet associations
+- associate the private 1 subnet with the private 1 round table
+Create Route Table
+- lucky-star-private-route-table-2
+- select VPC
+- create route table
+Edit subnet associations
+- associate the private 2 subnet with the private 2 round table
+Got to Route Tables click on the public one click Edit routes
+- Add route
+- 0.0.0.0/0 
+-Internet Gateway
+- pick our gateway
+
+
+AWS EC2
+-------
+Launch Instance 
+lucky-star-EC2
+amazon linux
+free tier eligible
+keep everything the same
+create new key pair 
+Allow SSH traffic
+Allow HTTPS and HTTP traffic
+Edit network settings
+change vpc to public subnet 1
+enable auto assign public IP 
+ls-ec2-sg security group name
+security group rules 
+launch instance
+
+connect to ec2 instance 
+sudo su -
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+. ~/.nvm/nvm.sh
+nvm install node
+node -v
+npm -v
+sudo yum update -y
+sudo yum install git -y
+git --version
+git clone [your-github-link]
+cd real-estate-prod
+cd server
+npm i
+echo "PORT=80" > .env
+npm run dev
+npm i pm2 -g
+module.exports = { apps : [{ name: 'inventory-management', script: 'npm', args: 'run dev', env: { NODE_ENV: 'development', ENV_VAR1: 'environment-variable', } }], };
+nano ecosystem.config.js
+sudo env PATH=$PATH:$(which node) $(which pm2) startup systemd -u $USER --hp $(eval echo ~$USER)
+pm2 start ecosystem.config.js
+
+
+
+
+
+
+
+
+AWS RDS
+
+
+
+
+AWS Amplify
+
+
+
+
+AWS Api Gateway
+
+
+
+
+AWS S3
+
+
+
+
+
+
++----------------------------------+
+| Issues encountered while testing |
++----------------------------------+
+
+Issue: Mapbox seems to be having an unknown console error and the map is invisible in the bottom of the property details page.
+Fixed: Issue was a typo in the map link whoops
+
+Issue: There is a next.js error in the manager page but information provided is not giving me clues to what it is. I does not seem to be effecting the apps ability to run. I might need to come back to it later.
+It looks like a promise error. Hmmmm. 
+
+Issue: Signin sometimes returns a 404 and we see the 404 for a brief second but then it loads properly.
+
+
+Issue: Search Bar is janky and only accepts exact coordinates or address but not zip code or city.
+
+
+
+
+
+
+
+
+
+
+
+
+
+===============================
+PAGES CREATED (FROM NOTES ... Currently not up to date)
+===============================
+1. Home Page
+   Path: client/src/app/page.tsx
+2. Landing Page
+   Path: client/src/app/(nondashboard)/landing-page/page.tsx
+3. Route Group Layout
+   Path: client/src/app/(nondashboard)/layout.tsx
+4. Landing Page Layout
+   Path: client/src/app/(nondashboard)/landing-page/layout.tsx
+5. Global App Layout
+   Path: client/src/app/layout.tsx
+===============================
+COMPONENTS CREATED
+===============================
+Global:
+- providers.tsx (client/src/app/providers.tsx)
+Landing Page Components:
+- Navbar.tsx (client/src/components/Navbar.tsx)
+- HeroSection.tsx
+- FeaturesSection.tsx
+- DiscoverSection.tsx
+- CallToActionSection.tsx
+- FooterSection.tsx
+- constants.ts
+===============================
+ADDITIONAL FILES / FOLDERS
+===============================
+- globals.css
+- tailwind.config.ts
+- tsconfig.json
+- public/ (added)
+- hooks/ folder
+- lib/ folder
+- state/ folder
+- types/ folder
+===============================
+SUMMARY
+===============================
+Pages: Home page, Landing page
+Layouts: Global, (nondashboard), Landing page
+Components: Navbar, HeroSection, FeaturesSection, DiscoverSection, CallToActionSection, FooterSection
+
+
+
+| Purpose          | Naming Style    | Example        |
+| ---------------- | --------------- | -------------- |
+| Component        | PascalCase      | `PropertyCard` |
+| Page Component   | PascalCase      | `HomePage`     |
+| Helper function  | camelCase       | `formatDate`   |
+| Custom hook      | use + camelCase | `useUserStore` |
+| Event handler    | camelCase       | `handleLogin`  |
+| Context provider | PascalCase      | `AuthProvider` |
+
+
+Standard Tailwind order:
+layout → size → spacing
+className='mx-auto max-w-4xl px-16 sm:px-12'
+
+

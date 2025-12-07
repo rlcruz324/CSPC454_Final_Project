@@ -1,0 +1,149 @@
+'use client';
+
+// 1. React + Next.js framework utilities
+import React from 'react';
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
+
+// 2. Internal UI components (sidebar layout and interaction)
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from './ui/sidebar';
+
+// 3. Icons used for navigation items
+import {
+  Building,
+  FileText,
+  Heart,
+  Home,
+  Menu,
+  Settings,
+  X,
+} from 'lucide-react';
+
+// 4. Project constants + shared helpers
+import { NAVBAR_HEIGHT } from '@/lib/constants';
+import { cn } from '@/lib/utils';
+
+// Sidebar component: Displays role-based navigation for manager or tenant views.
+const AppSidebar = ({ userType }: AppSidebarProps) => {
+  const pathname = usePathname();
+  const { toggleSidebar, open } = useSidebar();
+
+  // Role-driven navigation items to ensure proper route access
+  const navLinks =
+    userType === 'manager'
+      ? [
+          { icon: Building, label: 'Properties', href: '/managers/properties' },
+          { icon: FileText, label: 'Applications', href: '/managers/applications' },
+          { icon: Settings, label: 'Settings', href: '/managers/settings' },
+        ]
+      : [
+          { icon: Heart, label: 'Favorites', href: '/tenants/favorites' },
+          { icon: FileText, label: 'Applications', href: '/tenants/applications' },
+          { icon: Home, label: 'Residences', href: '/tenants/residences' },
+          { icon: Settings, label: 'Settings', href: '/tenants/settings' },
+        ];
+
+  return (
+    <Sidebar
+      collapsible='icon'
+      className='fixed left-0 bg-white shadow-lg'
+      // Sidebar height anchored to remain under the fixed navbar
+      style={{
+        top: `${NAVBAR_HEIGHT}px`,
+        height: `calc(100vh - ${NAVBAR_HEIGHT}px)`,
+      }}
+    >
+      {/* Header section: Contains sidebar label + collapse toggle */}
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <div
+              className={cn(
+                'flex min-h-[56px] w-full items-center pt-3 mb-3',
+                open ? 'justify-between px-6' : 'justify-center'
+              )}
+            >
+              {open ? (
+                <>
+                  {/* View label adjusts based on authenticated role */}
+                  <h1 className='text-xl font-bold text-gray-800'>
+                    {userType === 'manager' ? 'Manager View' : 'Renter View'}
+                  </h1>
+
+                  {/* Close button for expanded sidebar */}
+                  <button
+                    className='hover:bg-gray-100 p-2 rounded-md'
+                    onClick={() => toggleSidebar()}
+                  >
+                    <X className='h-6 w-6 text-gray-600' />
+                  </button>
+                </>
+              ) : (
+                /* Expand button for collapsed sidebar */
+                <button
+                  className='hover:bg-gray-100 p-2 rounded-md'
+                  onClick={() => toggleSidebar()}
+                >
+                  <Menu className='h-6 w-6 text-gray-600' />
+                </button>
+              )}
+            </div>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
+
+      {/* Navigation items section */}
+      <SidebarContent>
+        <SidebarMenu>
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+
+            return (
+              <SidebarMenuItem key={link.href}>
+                <SidebarMenuButton
+                  asChild
+                  className={cn(
+                    'flex items-center px-7 py-7',
+                    isActive ? 'bg-gray-100' : 'text-gray-600 hover:bg-gray-100',
+                    open ? 'text-blue-600' : 'ml-[5px]'
+                  )}
+                >
+                  <Link href={link.href} className='w-full' scroll={false}>
+                    <div className='flex items-center gap-3'>
+                      {/* Icon color shifts depending on active link state */}
+                      <link.icon
+                        className={`h-5 w-5 ${
+                          isActive ? 'text-blue-600' : 'text-gray-600'
+                        }`}
+                      />
+
+                      {/* Navigation label text */}
+                      <span
+                        className={`font-medium ${
+                          isActive ? 'text-blue-600' : 'text-gray-600'
+                        }`}
+                      >
+                        {link.label}
+                      </span>
+                    </div>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            );
+          })}
+        </SidebarMenu>
+      </SidebarContent>
+    </Sidebar>
+  );
+};
+
+export default AppSidebar;
+ 
