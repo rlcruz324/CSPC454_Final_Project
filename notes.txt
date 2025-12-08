@@ -499,7 +499,7 @@ Make sure to make graph or visual for the architecture
 VPC is the API Gateway
 EC2 has backend 
 There are 2 private subnets needed for RDS for different availability zones 
-
+Amplify for hosting nextjs
 
 AWS Networking
 --------------
@@ -507,7 +507,7 @@ Go to VPC
 us-west-2
 Create VPC
 - VPC only
-- lucky_star_vpc
+- lucky-star-vpc
 - IPv4 CIDR manual input
 - 10.0.0.0/16
 - create vpc
@@ -515,11 +515,11 @@ Create subnet (in our VPC)
 subnet 1 of 2
 - Select the VPC
 - lucky-star-public-subnet-1
-- us-west-2
+- us-west-2a
 - 10.0.0.0/24
 subnet 2 of 2
 - lucky-star-private-subnet-1
-- us-west-2
+- us-west-2a
 - 10.0.0.0/16
 - 10.0.1.0/24
 add subnet 3 of 3
@@ -527,15 +527,18 @@ add subnet 3 of 3
 - us-west-2b
 - 10.0.0.0/16
 - 10.0.2.0/24
+
 Create internet Gateway
 - lucky-star-internet-gateway
 - attach to our vpc
+
 Create Route Table
 - lucky-star-public-route-table-1
 - select VPC
 - create route table
 Edit subnet associations
 - associate the public subnet with the public round table
+
 Create Route Table
 - lucky-star-private-route-table-1
 - select VPC
@@ -548,6 +551,7 @@ Create Route Table
 - create route table
 Edit subnet associations
 - associate the private 2 subnet with the private 2 round table
+
 Got to Route Tables click on the public one click Edit routes
 - Add route
 - 0.0.0.0/0 
@@ -558,7 +562,7 @@ Got to Route Tables click on the public one click Edit routes
 AWS EC2
 -------
 Launch Instance 
-lucky-star-EC2
+lucky-star-ec2
 amazon linux
 free tier eligible
 keep everything the same
@@ -568,7 +572,7 @@ Allow HTTPS and HTTP traffic
 Edit network settings
 change vpc to public subnet 1
 enable auto assign public IP 
-ls-ec2-sg security group name
+lucky-star-ec2-security-group security group name
 security group rules 
 launch instance
 
@@ -603,43 +607,189 @@ npm run dev
 
 pm2 in case project crashes
 npm i pm2 -g
-module.exports = { apps : [{ name: 'inventory-management', script: 'npm', args: 'run dev', env: { NODE_ENV: 'development', ENV_VAR1: 'environment-variable', } }], };
+module.exports = { apps : [{ name: 'lucky-star-real-estate', script: 'npm', args: 'run dev', env: { NODE_ENV: 'development', ENV_VAR1: 'environment-variable', } }], };
 nano ecosystem.config.js
 sudo env PATH=$PATH:$(which node) $(which pm2) startup systemd -u $USER --hp $(eval echo ~$USER)
 pm2 start ecosystem.config.js
 
 
 To edit code later.
-ssh ec2-user@your-ec2-ip
-cd real-estate-prod/server
+ssh ec2-user@34.220.42.236
+cd CSPC454_Final_Project/backend
 git pull
 npm i
 pm2 restart all
 # or
 pm2 restart inventory-management
-
-
-
-
+API gateway to connect the the backend from the frontend http routes
 
 
 AWS RDS
+--------
+Create database
+PostgreSQL
+lucky-star-database
+postgres is master username
+masterpassword is secret saved it to a local txt file
+disable storage autoscaling to prevent charges
+pick the VPC
+new vpc security group name
+ls-rds-sg
 
+go to the security group
+edit inbound rules
+add the security group ls-ec2-sg to source
 
+go to ec2 instance 
+click security
+check outbound rules
+edit outbound rules
+add the secrity group ls-rds-sg
+
+go back to ec2 instance connection
+pm2 delete all
+pm2 suddenly not working
+tried this fix
+sudo su -
+export NVM_DIR=/home/ec2-user/.nvm
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+pm2 restart all
+did not work
+trying this
+sudo npm i -g pm2
+npm is not installed?
+installed it again and it fixed the problem
+
+pm2 delete all
+nano .env
+add the new database url 
+npm run prisma:generate
+npx prisma migrate dev --name init
+npm run seed
+pm2 start ecosystem.config.js
+pm2 monit
 
 
 AWS Amplify
+-----------
+Deploy and app
+Connect to github
+pick the repository
+main
+my app is a monorepo
+frontend
+there should be an option for create and use a new service role but i dont see it
+Advanced settings
+add .env variables
+keep cookies in cache key
+save and deploy
+changes in github will reflect automatically
 
-
+went to IAM to create the role manually but looks like it was already made.
 
 
 AWS Api Gateway
+---------------
+Create Api
+Rest Api (So we can use cognito auth)
+Create Rest Api
+lucky-star-api-gateway
+forces you to use a security policy now which is not in the tutorial.
+I picked SECURITYPOLICY_TLS13_1_2_2021_06 (hopefully that is fine)
+IP address type i picked Dualstack I didnt see the same options as the tutorial and theres new options that were not there. Tutorial had API endpoint type regional but thats not visible to me. 
 
+Create resource
+proxy resource
+{proxy+}
+CORS
+select ANY and hi edit integration
+HTTP
+HTTP proxy integration
+HTTP method ANY
+use ec2 instance as Endpoint URL http://34.220.42.236/{proxy}
 
+now i need to make a cognito authorizer 
+
+click authorizers in the api gateway thingy
+create authorizer
+lucky-star-api-gateway-cognito-authorizer
+click cognito
+lucky-star-estates_congnito-userpool
+create
+
+back to resources click ANY
+go to method request settings and hit edit
+click the authorizer just made
+
+create resource
+/
+properties
+
+create method for properties
+GET 
+HTTP
+http proxy integration
+GET
+http://34.220.42.236/{proxy}
+
+deploy api
+new stage 
+prod 
+deploy
+
+https://35711dw219.execute-api.us-west-2.amazonaws.com/prod
+
+Going back to amplify
+environment variables
+manage variables
+replaced NEXT_PUBLIC_API_BASE_URL 
+
+go back to overview and redeploy
+
+ookay gonna go to deploy url and pray to the coding gods i can sign in. 
+
+Settings in tenant is not working oh my god 
+dont freak out lets finish deploying and then we can try fixing it
+for now just focus on meeting the minimum requirements for the project
+it might be bacause this user is not in the training data and needs to be added somehow
+tried to run npm run seed but it hangs
+could be an issue with a security group
+god i want to cry so bad but this isnt my only project and if i cry it stalls the whole process
+do i really need to figure this out to get at least a C in this?
+idk
+seeding works now but it did not solve the problem so back to square 1
+i tried everythingits been 12 hours im sick of this
+i jus twant to sleep so bad its been 3 days but i dont have time
+i dont think the congnito users are being added to the database...but why not?
+
+Im just going to start over maybe I was rushing the aws setup or something idk
+
+ihateawsihateawsihateaws
+i been sitting here for 18 hours!!!!aaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+i should be with my friend comforting her now that her dad passed 
+i wish aws didnt exit 
+
+ec2 commands i need for every reboot
+sudo su -
+nvm use 18
+cd CSPC454_Final_Project/backend
+npm run dev
+npm run seed
+pm2 start ecosystem.config.js
+
+alright its 4am i just redid everything from the beginning for aws
+up to this point
+i can only hope this works now
+waiting for it to finish deploying
+god please please please i worked so hard please
+i should have stayed an english major
+YESSSSSSSSSSSSSSSS
+OH MY GOD IT WORKS HOLY 
+i never want to do this again
 
 
 AWS S3
-
+------
 
 
 
