@@ -790,8 +790,14 @@ i never want to do this again
 
 AWS S3
 ------
+create bucket
+general Purpose
+lucky-star-s3-images
+turn off block all public access since this is just images
+i left on versioning since we did that in another class assignment
 
-
+click on the bucket click on permissions
+edit bucket policy 
 
 
 
