@@ -221,128 +221,10 @@ export const getProperty = async (
 import { GetObjectCommand } from '@aws-sdk/client-s3';
 const streamToBuffer = require('stream-to-buffer');
 
+
+
+
 export const createProperty = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const files = req.files as Express.Multer.File[];
-    const { address, city, state, country, postalCode, managerCognitoId, ...propertyData } = req.body;
-
-    console.log('Received property creation request:', { address, city, state, country, postalCode, managerCognitoId, propertyData });
-
-    // Upload photos
-    const photoUrls = await Promise.all(
-      files.map(async (file) => {
-        // Use buffer if available, otherwise read from disk path
-        const fileBody = file.buffer || require('fs').readFileSync(file.path);
-
-        const Key = `properties/${Date.now()}-${file.originalname}`;
-        const uploadParams = {
-          Bucket: process.env.S3_BUCKET_NAME!,
-          Key,
-          Body: fileBody,
-          ContentType: file.mimetype, // ensure browser can render image
-        };
-
-        console.log('Uploading file to S3:', Key);
-
-        // Perform the upload
-        await new Upload({ client: s3Client, params: uploadParams }).done();
-
-        // Verify uploaded image
-        const getObject = new GetObjectCommand({ Bucket: process.env.S3_BUCKET_NAME!, Key });
-        const s3Object = await s3Client.send(getObject);
-
-        const buffer: Buffer = await new Promise((resolve, reject) => {
-          streamToBuffer(s3Object.Body as any, (err: any, buf: Buffer) => {
-            if (err) reject(err);
-            else resolve(buf);
-          });
-        });
-
-        // Simple magic byte check for common image types
-        const isValidImage =
-          buffer.slice(0, 4).equals(Buffer.from([0xff, 0xd8, 0xff])) || // JPEG
-          buffer.slice(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])); // PNG
-
-        if (!isValidImage) {
-          throw new Error(`Uploaded file ${file.originalname} is not a valid image`);
-        }
-
-        console.log(`Verified uploaded image: ${Key}`);
-
-        // Construct accessible S3 URL
-        return `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${Key}`;
-      })
-    );
-
-    console.log('All photos uploaded:', photoUrls);
-
-    // Geocoding
-    const geocodingUrl = `https://nominatim.openstreetmap.org/search?${new URLSearchParams({
-      street: address,
-      city,
-      country,
-      postalcode: postalCode,
-      format: 'json',
-      limit: '1',
-    }).toString()}`;
-
-    console.log('Calling geocoding API:', geocodingUrl);
-
-    const geocodingResponse = await axios.get(geocodingUrl, {
-      headers: { 'User-Agent': 'RealEstateApp (justsomedummyemail@gmail.com)' },
-    });
-
-    console.log('Geocoding response:', geocodingResponse.data);
-
-    const [longitude, latitude] =
-      geocodingResponse.data[0]?.lon && geocodingResponse.data[0]?.lat
-        ? [parseFloat(geocodingResponse.data[0].lon), parseFloat(geocodingResponse.data[0].lat)]
-        : [0, 0];
-
-    console.log('Geocoded coordinates:', { longitude, latitude });
-
-    // Insert location
-    const [location] = await prisma.$queryRaw<Location[]>`
-      INSERT INTO "Location" (address, city, state, country, "postalCode", coordinates)
-      VALUES (${address}, ${city}, ${state}, ${country}, ${postalCode}, ST_SetSRID(ST_MakePoint(${longitude}, ${latitude}), 4326))
-      RETURNING id, address, city, state, country, "postalCode", ST_AsText(coordinates) as coordinates;
-    `;
-
-    console.log('Inserted location:', location);
-
-    // Create property
-    const newProperty = await prisma.property.create({
-      data: {
-        ...propertyData,
-        photoUrls,
-        locationId: location.id,
-        managerCognitoId,
-        amenities: typeof propertyData.amenities === 'string' ? propertyData.amenities.split(',') : [],
-        highlights: typeof propertyData.highlights === 'string' ? propertyData.highlights.split(',') : [],
-        isPetsAllowed: propertyData.isPetsAllowed === 'true',
-        isParkingIncluded: propertyData.isParkingIncluded === 'true',
-        pricePerMonth: parseFloat(propertyData.pricePerMonth),
-        securityDeposit: parseFloat(propertyData.securityDeposit),
-        applicationFee: parseFloat(propertyData.applicationFee),
-        beds: parseInt(propertyData.beds),
-        baths: parseFloat(propertyData.baths),
-        squareFeet: parseInt(propertyData.squareFeet),
-      },
-      include: { location: true, manager: true },
-    });
-
-    console.log('Property created successfully:', newProperty);
-    res.status(201).json(newProperty);
-  } catch (err: any) {
-    console.error('Error creating property:', err); // <- log full error stack
-    res.status(500).json({ message: `Error creating property: ${err.message}` });
-  }
-};
-
-
-
-
-/* export const createProperty = async (req: Request, res: Response): Promise<void> => {
   try {
     const files = req.files as Express.Multer.File[];
     const { address, city, state, country, postalCode, managerCognitoId, ...propertyData } = req.body;
@@ -431,7 +313,7 @@ export const createProperty = async (req: Request, res: Response): Promise<void>
     console.error('Error creating property:', err); // <- log full error stack
     res.status(500).json({ message: `Error creating property: ${err.message}` });
   }
-}; */
+};
 
 //Creates a property, uploads photos to S3, performs geocoding, inserts a location,
 //and saves final property data to the database. Handles array parsing, numeric

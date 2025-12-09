@@ -850,6 +850,11 @@ pm2 startup systemd
 
 
 
+Somehow i broke it even worse than before and i feel so defeated 
+i think if i ever get it back up an running again that i will just leave it alone 
+i gotta get ready to go to class. i hate how i lose 8 hours of my day to travel and class 
+i really need that time to work on the project ...
+ec2 is being completely unresponsive for an hour
 
 
 
