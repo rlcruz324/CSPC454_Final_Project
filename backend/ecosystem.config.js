@@ -2,10 +2,10 @@ module.exports = {
   apps: [
     {
       name: "lucky-star-real-estate",
-      script: "npm",
-      args: "run dev",
+      script: "dist/index.js",
+      //args: "run dev",
       env: {
-        NODE_ENV: "development",
+        NODE_ENV: "production",
       },
     },
   ],

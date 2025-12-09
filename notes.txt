@@ -843,9 +843,10 @@ Issue: The image is in the s3 bucket when i make a new property but it does not 
 I think the link is wrong.
 
 
-
-
-
+Issue: The ec2 needs me to run npm run dev everytime I want to check my app
+Solution: run the following
+pm2 save
+pm2 startup systemd
 
 
 
