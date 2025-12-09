@@ -836,6 +836,11 @@ Issue: Signin sometimes returns a 404 and we see the 404 for a brief second but 
 Issue: Search Bar is janky and only accepts exact coordinates or address but not zip code or city.
 
 
+Issue: Add new property does not work. I think the issue has to do with the s3 bucket.
+Fixed: fixed the .env in ec2 and added an IAM role to ec2 for s3bucket
+
+Issue: The image is in the s3 bucket when i make a new property but it does not show in the app. 
+I think the link is wrong.
 
 
 
