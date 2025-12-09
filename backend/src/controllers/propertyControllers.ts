@@ -217,26 +217,15 @@ export const getProperty = async (
   }
 };
 
-//Creates a property, uploads photos to S3, performs geocoding, inserts a location,
-//and saves final property data to the database. Handles array parsing, numeric
-//conversions, and spatial data creation.
-export const createProperty = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+
+export const createProperty = async (req: Request, res: Response): Promise<void> => {
   try {
     const files = req.files as Express.Multer.File[];
-    const {
-      address,
-      city,
-      state,
-      country,
-      postalCode,
-      managerCognitoId,
-      ...propertyData
-    } = req.body;
+    const { address, city, state, country, postalCode, managerCognitoId, ...propertyData } = req.body;
 
-    //Uploads each photo to S3 and collects their URLs.
+    console.log('Received property creation request:', { address, city, state, country, postalCode, managerCognitoId, propertyData });
+
+    // Upload photos
     const photoUrls = await Promise.all(
       files.map(async (file) => {
         const uploadParams = {
@@ -246,63 +235,60 @@ export const createProperty = async (
           ContentType: file.mimetype,
         };
 
-        const uploadResult = await new Upload({
-          client: s3Client,
-          params: uploadParams,
-        }).done();
+        console.log('Uploading file to S3:', uploadParams.Key);
+
+        const uploadResult = await new Upload({ client: s3Client, params: uploadParams }).done();
+        console.log('Uploaded file to S3:', uploadResult);
 
         return uploadResult.Location;
       })
     );
 
-    //Performs geocoding using OpenStreetMap Nominatim API.
-    const geocodingUrl = `https://nominatim.openstreetmap.org/search?${new URLSearchParams(
-      {
-        street: address,
-        city,
-        country,
-        postalcode: postalCode,
-        format: 'json',
-        limit: '1',
-      }
-    ).toString()}`;
+    console.log('All photos uploaded:', photoUrls);
+
+    // Geocoding
+    const geocodingUrl = `https://nominatim.openstreetmap.org/search?${new URLSearchParams({
+      street: address,
+      city,
+      country,
+      postalcode: postalCode,
+      format: 'json',
+      limit: '1',
+    }).toString()}`;
+
+    console.log('Calling geocoding API:', geocodingUrl);
 
     const geocodingResponse = await axios.get(geocodingUrl, {
-      headers: {
-        'User-Agent': 'RealEstateApp (justsomedummyemail@gmail.com',
-      },
+      headers: { 'User-Agent': 'RealEstateApp (justsomedummyemail@gmail.com)' },
     });
+
+    console.log('Geocoding response:', geocodingResponse.data);
 
     const [longitude, latitude] =
       geocodingResponse.data[0]?.lon && geocodingResponse.data[0]?.lat
-        ? [
-            parseFloat(geocodingResponse.data[0]?.lon),
-            parseFloat(geocodingResponse.data[0]?.lat),
-          ]
+        ? [parseFloat(geocodingResponse.data[0].lon), parseFloat(geocodingResponse.data[0].lat)]
         : [0, 0];
 
-    //Inserts location record with geometry based on geocoded coordinates.
+    console.log('Geocoded coordinates:', { longitude, latitude });
+
+    // Insert location
     const [location] = await prisma.$queryRaw<Location[]>`
       INSERT INTO "Location" (address, city, state, country, "postalCode", coordinates)
       VALUES (${address}, ${city}, ${state}, ${country}, ${postalCode}, ST_SetSRID(ST_MakePoint(${longitude}, ${latitude}), 4326))
       RETURNING id, address, city, state, country, "postalCode", ST_AsText(coordinates) as coordinates;
     `;
 
-    //Creates the property entry with parsed fields and relationships.
+    console.log('Inserted location:', location);
+
+    // Create property
     const newProperty = await prisma.property.create({
       data: {
         ...propertyData,
         photoUrls,
         locationId: location.id,
         managerCognitoId,
-        amenities:
-          typeof propertyData.amenities === 'string'
-            ? propertyData.amenities.split(',')
-            : [],
-        highlights:
-          typeof propertyData.highlights === 'string'
-            ? propertyData.highlights.split(',')
-            : [],
+        amenities: typeof propertyData.amenities === 'string' ? propertyData.amenities.split(',') : [],
+        highlights: typeof propertyData.highlights === 'string' ? propertyData.highlights.split(',') : [],
         isPetsAllowed: propertyData.isPetsAllowed === 'true',
         isParkingIncluded: propertyData.isParkingIncluded === 'true',
         pricePerMonth: parseFloat(propertyData.pricePerMonth),
@@ -312,16 +298,122 @@ export const createProperty = async (
         baths: parseFloat(propertyData.baths),
         squareFeet: parseInt(propertyData.squareFeet),
       },
-      include: {
-        location: true,
-        manager: true,
-      },
+      include: { location: true, manager: true },
     });
 
+    console.log('Property created successfully:', newProperty);
     res.status(201).json(newProperty);
   } catch (err: any) {
-    res
-      .status(500)
-      .json({ message: `Error creating property: ${err.message}` });
+    console.error('Error creating property:', err); // <- log full error stack
+    res.status(500).json({ message: `Error creating property: ${err.message}` });
   }
 };
+
+//Creates a property, uploads photos to S3, performs geocoding, inserts a location,
+//and saves final property data to the database. Handles array parsing, numeric
+//conversions, and spatial data creation.
+// export const createProperty = async (
+//   req: Request,
+//   res: Response
+// ): Promise<void> => {
+//   try {
+//     const files = req.files as Express.Multer.File[];
+//     const {
+//       address,
+//       city,
+//       state,
+//       country,
+//       postalCode,
+//       managerCognitoId,
+//       ...propertyData
+//     } = req.body;
+
+//     //Uploads each photo to S3 and collects their URLs.
+//     const photoUrls = await Promise.all(
+//       files.map(async (file) => {
+//         const uploadParams = {
+//           Bucket: process.env.S3_BUCKET_NAME!,
+//           Key: `properties/${Date.now()}-${file.originalname}`,
+//           Body: file.buffer,
+//           ContentType: file.mimetype,
+//         };
+
+//         const uploadResult = await new Upload({
+//           client: s3Client,
+//           params: uploadParams,
+//         }).done();
+
+//         return uploadResult.Location;
+//       })
+//     );
+
+//     //Performs geocoding using OpenStreetMap Nominatim API.
+//     const geocodingUrl = `https://nominatim.openstreetmap.org/search?${new URLSearchParams(
+//       {
+//         street: address,
+//         city,
+//         country,
+//         postalcode: postalCode,
+//         format: 'json',
+//         limit: '1',
+//       }
+//     ).toString()}`;
+
+//     const geocodingResponse = await axios.get(geocodingUrl, {
+//       headers: {
+//         'User-Agent': 'RealEstateApp (justsomedummyemail@gmail.com',
+//       },
+//     });
+
+//     const [longitude, latitude] =
+//       geocodingResponse.data[0]?.lon && geocodingResponse.data[0]?.lat
+//         ? [
+//             parseFloat(geocodingResponse.data[0]?.lon),
+//             parseFloat(geocodingResponse.data[0]?.lat),
+//           ]
+//         : [0, 0];
+
+//     //Inserts location record with geometry based on geocoded coordinates.
+//     const [location] = await prisma.$queryRaw<Location[]>`
+//       INSERT INTO "Location" (address, city, state, country, "postalCode", coordinates)
+//       VALUES (${address}, ${city}, ${state}, ${country}, ${postalCode}, ST_SetSRID(ST_MakePoint(${longitude}, ${latitude}), 4326))
+//       RETURNING id, address, city, state, country, "postalCode", ST_AsText(coordinates) as coordinates;
+//     `;
+
+//     //Creates the property entry with parsed fields and relationships.
+//     const newProperty = await prisma.property.create({
+//       data: {
+//         ...propertyData,
+//         photoUrls,
+//         locationId: location.id,
+//         managerCognitoId,
+//         amenities:
+//           typeof propertyData.amenities === 'string'
+//             ? propertyData.amenities.split(',')
+//             : [],
+//         highlights:
+//           typeof propertyData.highlights === 'string'
+//             ? propertyData.highlights.split(',')
+//             : [],
+//         isPetsAllowed: propertyData.isPetsAllowed === 'true',
+//         isParkingIncluded: propertyData.isParkingIncluded === 'true',
+//         pricePerMonth: parseFloat(propertyData.pricePerMonth),
+//         securityDeposit: parseFloat(propertyData.securityDeposit),
+//         applicationFee: parseFloat(propertyData.applicationFee),
+//         beds: parseInt(propertyData.beds),
+//         baths: parseFloat(propertyData.baths),
+//         squareFeet: parseInt(propertyData.squareFeet),
+//       },
+//       include: {
+//         location: true,
+//         manager: true,
+//       },
+//     });
+
+//     res.status(201).json(newProperty);
+//   } catch (err: any) {
+//     res
+//       .status(500)
+//       .json({ message: `Error creating property: ${err.message}` });
+//   }
+// };

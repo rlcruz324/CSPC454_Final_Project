@@ -767,7 +767,7 @@ Im just going to start over maybe I was rushing the aws setup or something idk
 ihateawsihateawsihateaws
 i been sitting here for 18 hours!!!!aaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 i should be with my friend comforting her now that her dad passed 
-i wish aws didnt exit 
+i wish aws didnt exist 
 
 ec2 commands i need for every reboot
 sudo su -
@@ -799,6 +799,26 @@ i left on versioning since we did that in another class assignment
 click on the bucket click on permissions
 edit bucket policy 
 
+ITS NOT WORKING AGAIN AND ITS THE SAME ISSUE OH MY GOD
+okay lets think all that i did before the issue returned was edit the .env in the ec2 instance
+while i was doing that my laptop died
+i had to reconnect to the ec2 instance
+so it is something i need to redo or something
+a step i need to redo
+could be i didnt do something
+I was so close to the end i could have slept today
+cant connect to the instance again
+gonna reboot
+this is such a bummer
+will this even work when i present
+i just want to sleep peeeease
+okay its working again
+the issue comes from ec2 if i skip commands 
+
+add new property does not work
+ill figure it out later its not that important probably
+im just gonna have to turn in a buggy mess huh
+
 
 
 +----------------------------------+
@@ -812,7 +832,6 @@ Issue: There is a next.js error in the manager page but information provided is 
 It looks like a promise error. Hmmmm. 
 
 Issue: Signin sometimes returns a 404 and we see the 404 for a brief second but then it loads properly.
-
 
 Issue: Search Bar is janky and only accepts exact coordinates or address but not zip code or city.
 
