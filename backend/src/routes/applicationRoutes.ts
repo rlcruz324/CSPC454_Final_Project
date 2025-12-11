@@ -15,10 +15,10 @@ import { requireRole } from '../middleware/requireRolesMiddleware';
 
 //Local components
 import {
-  createApplication,
-  listApplications,
-  updateApplicationStatus,
-} from '../controllers/applicationControllers';
+  addApplication,
+  getApplications,
+  setApplicationStatus,
+} from '../controllers/rentalApplicationControllers';
 
 //Types
 
@@ -27,14 +27,14 @@ const router = express.Router();
 
 //Creates a new rental application. Restricted to tenant role to prevent
 //unauthorized submissions.
-router.post('/', requireRole(['tenant']), createApplication);
+router.post('/', requireRole(['tenant']), addApplication);
 
 //Updates the status of an existing application. Restricted to managers to
 //maintain administrative control over approvals and denials.
-router.put('/:id/status', requireRole(['manager']), updateApplicationStatus);
+router.put('/:id/status', requireRole(['manager']), setApplicationStatus);
 
 //Retrieves applications with optional filtering based on user role and identity.
 //Accessible to both managers and tenants.
-router.get('/', requireRole(['manager', 'tenant']), listApplications);
+router.get('/', requireRole(['manager', 'tenant']), getApplications);
 
 export default router;

@@ -4,19 +4,13 @@
 //creation within transactions, payment date computation, and status-driven logic
 //for approvals, denials, and tenant-property associations.
 
-//React framework imports
 import { Request, Response } from 'express';
-
-
-//Project modules (lib, utils, state, constants)
 import { PrismaClient } from '@prisma/client';
-
-//Prisma client instance for database access.
 const prisma = new PrismaClient();
 
 //Lists applications based on optional tenant or manager context.
 //When userId and userType are present, results are filtered accordingly.
-export const listApplications = async (
+export const getApplications = async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -24,12 +18,12 @@ export const listApplications = async (
     const { userId, userType } = req.query;
 
     // Dynamic filtering based on user identity and role.
-    let whereClause: any = {};
+    let filterCriteria: any = {};
     if (userId && userType) {
       if (userType === 'tenant') {
-        whereClause = { tenantCognitoId: String(userId) };
+        filterCriteria = { tenantCognitoId: String(userId) };
       } else if (userType === 'manager') {
-        whereClause = {
+        filterCriteria = {
           property: {
             managerCognitoId: String(userId),
           },
@@ -38,8 +32,8 @@ export const listApplications = async (
     }
 
     //Fetch applications with related property, tenant, and location data.
-    const applications = await prisma.application.findMany({
-      where: whereClause,
+    const applicationsData = await prisma.application.findMany({
+      where: filterCriteria,
       include: {
         property: {
           include: {
@@ -52,7 +46,7 @@ export const listApplications = async (
     });
 
     //Calculates the next payment date based on the lease start date.
-    function calculateNextPaymentDate(startDate: Date): Date {
+    function computeNextPaymentDate(startDate: Date): Date {
       const today = new Date();
       const nextPaymentDate = new Date(startDate);
       while (nextPaymentDate <= today) {
@@ -63,7 +57,7 @@ export const listApplications = async (
 
     //Enhances each application with formatted address and lease details.
     const formattedApplications = await Promise.all(
-      applications.map(async (app) => {
+      applicationsData.map(async (app) => {
         const lease = await prisma.lease.findFirst({
           where: {
             tenant: { cognitoId: app.tenantCognitoId },
@@ -82,7 +76,7 @@ export const listApplications = async (
           lease: lease
             ? {
                 ...lease,
-                nextPaymentDate: calculateNextPaymentDate(lease.startDate),
+                nextPaymentDate: computeNextPaymentDate(lease.startDate),
               }
             : null,
         };
@@ -99,7 +93,7 @@ export const listApplications = async (
 
 //Creates a new application along with an associated lease inside a transaction.
 //Ensures consistent linking of tenant, property, and lease data.
-export const createApplication = async (
+export const addApplication = async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -116,12 +110,12 @@ export const createApplication = async (
     } = req.body;
 
     //Validates referenced property to obtain pricing information.
-    const property = await prisma.property.findUnique({
+    const selectedProperty = await prisma.property.findUnique({
       where: { id: propertyId },
       select: { pricePerMonth: true, securityDeposit: true },
     });
 
-    if (!property) {
+    if (!selectedProperty) {
       res.status(404).json({ message: 'Property not found' });
       return;
     }
@@ -132,8 +126,8 @@ export const createApplication = async (
         data: {
           startDate: new Date(),
           endDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
-          rent: property.pricePerMonth,
-          deposit: property.securityDeposit,
+          rent: selectedProperty.pricePerMonth,
+          deposit: selectedProperty.securityDeposit,
           property: { connect: { id: propertyId } },
           tenant: { connect: { cognitoId: tenantCognitoId } },
         },
@@ -171,7 +165,7 @@ export const createApplication = async (
 
 //Updates an application's status and performs related lease/property updates.
 //Approval creates a new lease and associates the tenant with the property.
-export const updateApplicationStatus = async (
+export const setApplicationStatus = async (
   req: Request,
   res: Response
 ): Promise<void> => {

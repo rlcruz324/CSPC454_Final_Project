@@ -14,17 +14,17 @@ const express_1 = __importDefault(require("express"));
 const requireRolesMiddleware_1 = require("../middleware/requireRolesMiddleware");
 //UI components
 //Local components
-const applicationControllers_1 = require("../controllers/applicationControllers");
+const rentalApplicationControllers_1 = require("../controllers/rentalApplicationControllers");
 //Types
 //Router instance for application-related routes.
 const router = express_1.default.Router();
 //Creates a new rental application. Restricted to tenant role to prevent
 //unauthorized submissions.
-router.post('/', (0, requireRolesMiddleware_1.requireRole)(['tenant']), applicationControllers_1.createApplication);
+router.post('/', (0, requireRolesMiddleware_1.requireRole)(['tenant']), rentalApplicationControllers_1.addApplication);
 //Updates the status of an existing application. Restricted to managers to
 //maintain administrative control over approvals and denials.
-router.put('/:id/status', (0, requireRolesMiddleware_1.requireRole)(['manager']), applicationControllers_1.updateApplicationStatus);
+router.put('/:id/status', (0, requireRolesMiddleware_1.requireRole)(['manager']), rentalApplicationControllers_1.setApplicationStatus);
 //Retrieves applications with optional filtering based on user role and identity.
 //Accessible to both managers and tenants.
-router.get('/', (0, requireRolesMiddleware_1.requireRole)(['manager', 'tenant']), applicationControllers_1.listApplications);
+router.get('/', (0, requireRolesMiddleware_1.requireRole)(['manager', 'tenant']), rentalApplicationControllers_1.getApplications);
 exports.default = router;
