@@ -812,13 +812,25 @@ cant connect to the instance again
 gonna reboot
 this is such a bummer
 will this even work when i present
-i just want to sleep peeeease
+i just want to sleep pleeeease
 okay its working again
 the issue comes from ec2 if i skip commands 
 
 add new property does not work
 ill figure it out later its not that important probably
 im just gonna have to turn in a buggy mess huh
+
+
++-------------------+
+| Cleanup / Changes |
++-------------------+
+Edited/Cleaned backend
+Made the changes in ec2 
+seems like everything is running smoothly
+
+
+
+
 
 
 
@@ -849,6 +861,9 @@ Solution: run the following
 pm2 save
 pm2 startup systemd
 
+Issue: shadcn button is too dark to read 
+
+
 
 
 Somehow i broke it even worse than before and i feel so defeated 
@@ -859,49 +874,6 @@ ec2 is being completely unresponsive for an hour
 
 
 
-===============================
-PAGES CREATED (FROM NOTES ... Currently not up to date)
-===============================
-1. Home Page
-   Path: client/src/app/page.tsx
-2. Landing Page
-   Path: client/src/app/(nondashboard)/landing-page/page.tsx
-3. Route Group Layout
-   Path: client/src/app/(nondashboard)/layout.tsx
-4. Landing Page Layout
-   Path: client/src/app/(nondashboard)/landing-page/layout.tsx
-5. Global App Layout
-   Path: client/src/app/layout.tsx
-===============================
-COMPONENTS CREATED
-===============================
-Global:
-- providers.tsx (client/src/app/providers.tsx)
-Landing Page Components:
-- Navbar.tsx (client/src/components/Navbar.tsx)
-- HeroSection.tsx
-- FeaturesSection.tsx
-- DiscoverSection.tsx
-- CallToActionSection.tsx
-- FooterSection.tsx
-- constants.ts
-===============================
-ADDITIONAL FILES / FOLDERS
-===============================
-- globals.css
-- tailwind.config.ts
-- tsconfig.json
-- public/ (added)
-- hooks/ folder
-- lib/ folder
-- state/ folder
-- types/ folder
-===============================
-SUMMARY
-===============================
-Pages: Home page, Landing page
-Layouts: Global, (nondashboard), Landing page
-Components: Navbar, HeroSection, FeaturesSection, DiscoverSection, CallToActionSection, FooterSection
 
 
 

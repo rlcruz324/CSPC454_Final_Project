@@ -5,23 +5,23 @@ import Header from "@/components/Header";
 import Loading from "@/components/Loading";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  useGetApplicationsQuery,
+  useGetApplicationsQuery as useFetchApplicationsQuery,
   useGetAuthUserQuery,
-  useUpdateApplicationStatusMutation,
+  useUpdateApplicationStatusMutation as useApplicationStatusUpdateMutation,
 } from "@/state/api";
 import { CircleCheckBig, Download, File, Hospital } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
 
-const Applications = () => {
+const ManagerApplicationsPage = () => {
   const { data: authUser } = useGetAuthUserQuery();
-  const [activeTab, setActiveTab] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
 
   const {
     data: applications,
     isLoading,
     isError,
-  } = useGetApplicationsQuery(
+  } = useFetchApplicationsQuery(
     {
       userId: authUser?.cognitoInfo?.userId,
       userType: "manager",
@@ -30,18 +30,18 @@ const Applications = () => {
       skip: !authUser?.cognitoInfo?.userId,
     }
   );
-  const [updateApplicationStatus] = useUpdateApplicationStatusMutation();
+  const [updateApplicationStatus] = useApplicationStatusUpdateMutation();
 
-  const handleStatusChange = async (id: number, status: string) => {
+  const updateApplicationStatusHandler = async (id: number, status: string) => {
     await updateApplicationStatus({ id, status });
   };
 
   if (isLoading) return <Loading />;
   if (isError || !applications) return <div>Error fetching applications</div>;
 
-  const filteredApplications = applications?.filter((application) => {
-    if (activeTab === "all") return true;
-    return application.status.toLowerCase() === activeTab;
+  const filteredByStatusApplications = applications?.filter((application) => {
+    if (statusFilter === "all") return true;
+    return application.status.toLowerCase() === statusFilter;
   });
 
   return (
@@ -51,8 +51,8 @@ const Applications = () => {
         subtitle="View and manage applications for your properties"
       />
       <Tabs
-        value={activeTab}
-        onValueChange={setActiveTab}
+        value={statusFilter}
+        onValueChange={setStatusFilter}
         className="w-full my-5"
       >
         <TabsList className="grid w-full grid-cols-4">
@@ -63,7 +63,7 @@ const Applications = () => {
         </TabsList>
         {["all", "pending", "approved", "denied"].map((tab) => (
           <TabsContent key={tab} value={tab} className="mt-5 w-full">
-            {filteredApplications
+            {filteredByStatusApplications
               .filter(
                 (application) =>
                   tab === "all" || application.status.toLowerCase() === tab
@@ -139,7 +139,7 @@ const Applications = () => {
                           <button
                             className="px-4 py-2 text-sm text-white bg-green-600 rounded hover:bg-green-500"
                             onClick={() =>
-                              handleStatusChange(application.id, "Approved")
+                              updateApplicationStatusHandler(application.id, "Approved")
                             }
                           >
                             Approve
@@ -147,7 +147,7 @@ const Applications = () => {
                           <button
                             className="px-4 py-2 text-sm text-white bg-red-600 rounded hover:bg-red-500"
                             onClick={() =>
-                              handleStatusChange(application.id, "Denied")
+                              updateApplicationStatusHandler(application.id, "Denied")
                             }
                           >
                             Deny
@@ -173,4 +173,4 @@ const Applications = () => {
   );
 };
 
-export default Applications;
+export default ManagerApplicationsPage;

@@ -4,16 +4,16 @@ import { CustomFormField } from "@/components/FormField";
 import Header from "@/components/Header";
 import { Form } from "@/components/ui/form";
 import { PropertyFormData, propertySchema } from "@/lib/schemas";
-import { useCreatePropertyMutation, useGetAuthUserQuery } from "@/state/api";
+import { useCreatePropertyMutation as useCreateNewPropertyMutation, useGetAuthUserQuery as useFetchAuthenticatedUserQuery } from "@/state/api";
 import { AmenityEnum, HighlightEnum, PropertyTypeEnum } from "@/lib/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 
-const NewProperty = () => {
-  const [createProperty] = useCreatePropertyMutation();
-  const { data: authUser } = useGetAuthUserQuery();
+const PropertyCreationPage = () => {
+  const [createProperty] = useCreateNewPropertyMutation();
+  const { data: authUser } = useFetchAuthenticatedUserQuery();
 
   const form = useForm<PropertyFormData>({
     resolver: zodResolver(propertySchema),
@@ -39,28 +39,28 @@ const NewProperty = () => {
     },
   });
 
-  const onSubmit = async (data: PropertyFormData) => {
+  const handlePropertySubmission = async (data: PropertyFormData) => {
     if (!authUser?.cognitoInfo?.userId) {
       throw new Error("No manager ID found");
     }
 
-    const formData = new FormData();
+    const managerFormData = new FormData();
     Object.entries(data).forEach(([key, value]) => {
       if (key === "photoUrls") {
         const files = value as File[];
         files.forEach((file: File) => {
-          formData.append("photos", file);
+          managerFormData.append("photos", file);
         });
       } else if (Array.isArray(value)) {
-        formData.append(key, JSON.stringify(value));
+        managerFormData.append(key, JSON.stringify(value));
       } else {
-        formData.append(key, String(value));
+        managerFormData.append(key, String(value));
       }
     });
 
-    formData.append("managerCognitoId", authUser.cognitoInfo.userId);
+    managerFormData.append("managerCognitoId", authUser.cognitoInfo.userId);
 
-    await createProperty(formData);
+    await createProperty(managerFormData);
   };
 
   return (
@@ -72,7 +72,7 @@ const NewProperty = () => {
       <div className="bg-white rounded-xl p-6">
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit(handlePropertySubmission)}
             className="p-4 space-y-10"
           >
             {/* Basic Information */}
@@ -238,4 +238,4 @@ const NewProperty = () => {
   );
 };
 
-export default NewProperty;
+export default PropertyCreationPage;
