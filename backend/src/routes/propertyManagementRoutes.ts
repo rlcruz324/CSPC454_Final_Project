@@ -13,10 +13,10 @@ import { requireRole } from '../middleware/requireRolesMiddleware';
 
 
 import {
-  getProperties,
-  getProperty,
-  createProperty,
-} from '../controllers/propertyControllers';
+  listProperties,
+  fetchPropertyByID,
+  addProperty,
+} from '../controllers/propertyManagementControllers';
 
 
 //multer configuration using in-memory storage for temporary photo handling.
@@ -30,10 +30,10 @@ const router = express.Router();
 
 //retrieves a list of all properties.
 //useful for displaying property listings or performing searches.
-router.get('/', getProperties);
+router.get('/', listProperties);
 
 //retrieves details for a single property identified by its ID.
-router.get('/:id', getProperty);
+router.get('/:id', fetchPropertyByID);
 
 //creates a new property. Requires manager authorization.
 //uploads multiple photos via multipart form-data using memory storage.
@@ -42,7 +42,7 @@ router.post(
   '/',
   requireRole(['manager']),
   upload.array('photos'),
-  createProperty
+  addProperty
 );
 
 export default router;

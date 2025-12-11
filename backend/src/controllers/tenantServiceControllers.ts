@@ -13,7 +13,7 @@ import { wktToGeoJSON } from '@terraformer/wkt';
 const prisma = new PrismaClient();
 
 //Retrieves a tenant by Cognito ID including favorite properties.
-export const getTenant = async (req: Request, res: Response): Promise<void> => {
+export const fetchTenant = async (req: Request, res: Response): Promise<void> => {
   try {
     const { cognitoId } = req.params;
 
@@ -37,7 +37,7 @@ export const getTenant = async (req: Request, res: Response): Promise<void> => {
 };
 
 //Creates a new tenant using basic identity and contact information.
-export const createTenant = async (
+export const addTenant = async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -62,7 +62,7 @@ export const createTenant = async (
 };
 
 //Updates tenant profile details.
-export const updateTenant = async (
+export const fetchTenantInfo = async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -89,7 +89,7 @@ export const updateTenant = async (
 
 //Retrieves properties where the tenant currently resides,
 //converting spatial coordinates into longitude/latitude format.
-export const getCurrentResidences = async (
+export const fetchTenantResidences = async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -134,7 +134,7 @@ export const getCurrentResidences = async (
 };
 
 //Adds a property to a tenant's list of favorites if not already present.
-export const addFavoriteProperty = async (
+export const addTenantFavoriteProperty = async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -181,7 +181,7 @@ export const addFavoriteProperty = async (
 };
 
 //Removes a property from a tenant's favorites.
-export const removeFavoriteProperty = async (
+export const removeTenantFavoriteProperty = async (
   req: Request,
   res: Response
 ): Promise<void> => {

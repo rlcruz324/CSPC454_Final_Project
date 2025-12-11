@@ -11,11 +11,11 @@ dotenv.config();
 
 //Internal Modules
 import { requireRole } from './middleware/requireRolesMiddleware';
-import tenantRoutes from './routes/tenantRoutes';
-import managerRoutes from './routes/managerRoutes';
-import propertyRoutes from './routes/propertyRoutes';
-import leaseRoutes from "./routes/leaseRoutes";
-import applicationRoutes from "./routes/applicationRoutes";
+import tenantRoutes from './routes/tenantServiceRoutes';
+import managerRoutes from './routes/managerServiceRoutes';
+import propertyRoutes from './routes/propertyManagementRoutes';
+import leaseRoutes from "./routes/leasePaymentRoutes";
+import applicationRoutes from "./routes/rentalApplicationRoutes";
 
 
 //App Setup 

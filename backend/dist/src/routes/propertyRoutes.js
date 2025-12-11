@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const multer_1 = __importDefault(require("multer"));
 const requireRolesMiddleware_1 = require("../middleware/requireRolesMiddleware");
-const propertyControllers_1 = require("../controllers/propertyControllers");
+const propertyManagementControllers_1 = require("../controllers/propertyManagementControllers");
 //multer configuration using in-memory storage for temporary photo handling.
 //this allows the controller to process images without writing files to disk.
 //could be why the s3 bucket keeps getting junk in it instead of the actual file
@@ -22,11 +22,11 @@ const upload = (0, multer_1.default)({ storage });
 const router = express_1.default.Router();
 //retrieves a list of all properties.
 //useful for displaying property listings or performing searches.
-router.get('/', propertyControllers_1.getProperties);
+router.get('/', propertyManagementControllers_1.listProperties);
 //retrieves details for a single property identified by its ID.
-router.get('/:id', propertyControllers_1.getProperty);
+router.get('/:id', propertyManagementControllers_1.fetchPropertyByID);
 //creates a new property. Requires manager authorization.
 //uploads multiple photos via multipart form-data using memory storage.
 //could also be the reason for the s3 bucket issue maybe
-router.post('/', (0, requireRolesMiddleware_1.requireRole)(['manager']), upload.array('photos'), propertyControllers_1.createProperty);
+router.post('/', (0, requireRolesMiddleware_1.requireRole)(['manager']), upload.array('photos'), propertyManagementControllers_1.addProperty);
 exports.default = router;

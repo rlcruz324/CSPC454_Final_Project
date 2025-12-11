@@ -14,11 +14,11 @@ const morgan_1 = __importDefault(require("morgan"));
 dotenv_1.default.config();
 //Internal Modules
 const requireRolesMiddleware_1 = require("./middleware/requireRolesMiddleware");
-const tenantRoutes_1 = __importDefault(require("./routes/tenantRoutes"));
-const managerRoutes_1 = __importDefault(require("./routes/managerRoutes"));
-const propertyRoutes_1 = __importDefault(require("./routes/propertyRoutes"));
-const leaseRoutes_1 = __importDefault(require("./routes/leaseRoutes"));
-const applicationRoutes_1 = __importDefault(require("./routes/applicationRoutes"));
+const tenantServiceRoutes_1 = __importDefault(require("./routes/tenantServiceRoutes"));
+const managerServiceRoutes_1 = __importDefault(require("./routes/managerServiceRoutes"));
+const propertyManagementRoutes_1 = __importDefault(require("./routes/propertyManagementRoutes"));
+const leasePaymentRoutes_1 = __importDefault(require("./routes/leasePaymentRoutes"));
+const rentalApplicationRoutes_1 = __importDefault(require("./routes/rentalApplicationRoutes"));
 //App Setup 
 const app = (0, express_1.default)();
 //dotenv.config();
@@ -50,11 +50,11 @@ app.get("/", (req, res) => {
     res.send("Welcome to the home route. Glad you are here.");
 });
 //Protected and modular routes
-app.use("/applications", applicationRoutes_1.default);
-app.use("/properties", propertyRoutes_1.default);
-app.use("/leases", leaseRoutes_1.default);
-app.use("/tenants", (0, requireRolesMiddleware_1.requireRole)(["tenant"]), tenantRoutes_1.default);
-app.use("/managers", (0, requireRolesMiddleware_1.requireRole)(["manager"]), managerRoutes_1.default);
+app.use("/applications", rentalApplicationRoutes_1.default);
+app.use("/properties", propertyManagementRoutes_1.default);
+app.use("/leases", leasePaymentRoutes_1.default);
+app.use("/tenants", (0, requireRolesMiddleware_1.requireRole)(["tenant"]), tenantServiceRoutes_1.default);
+app.use("/managers", (0, requireRolesMiddleware_1.requireRole)(["manager"]), managerServiceRoutes_1.default);
 //Add Error Middleware here later???
 //Server Listener
 const port = Number(process.env.PORT) || 3002;

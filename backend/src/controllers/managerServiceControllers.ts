@@ -13,7 +13,7 @@ import { wktToGeoJSON } from '@terraformer/wkt';
 const prisma = new PrismaClient();
 
 //Retrieves a single manager by Cognito ID. Used for displaying or validating manager profile data.
-export const getManager = async (
+export const fetchManger = async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -38,7 +38,7 @@ export const getManager = async (
 
 //Creates a new manager record using basic profile fields.
 //Typically run during first-time authentication or onboarding.
-export const createManager = async (
+export const addManager = async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -63,7 +63,7 @@ export const createManager = async (
 };
 
 //Updates manager information. Supports editing of name, email, or phone number.
-export const updateManager = async (
+export const editManager = async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -90,7 +90,7 @@ export const updateManager = async (
 
 //Retrieves all properties belonging to a manager and converts their spatial WKT
 //coordinates to standard longitude/latitude for frontend use.
-export const getManagerProperties = async (
+export const fetchManagerProperties = async (
   req: Request,
   res: Response
 ): Promise<void> => {

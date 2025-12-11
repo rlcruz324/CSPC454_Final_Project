@@ -27,7 +27,7 @@ const s3Client = new S3Client({
 
 //retrieves multiple properties with dynamic filtering based on query parameters.
 //builds a raw SQL query using Prisma.sql, allowing expressive conditions and spatial operations.
-export const getProperties = async (
+export const listProperties = async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -176,7 +176,7 @@ export const getProperties = async (
 
 //Retrieves a single property with its resolved geographic coordinates.
 //Converts WKT geometry from the database into standard longitude/latitude format.
-export const getProperty = async (
+export const fetchPropertyByID = async (
   req: Request,
   res: Response
 ): Promise<void> => {
@@ -224,7 +224,7 @@ export const getProperty = async (
 //conversions, and spatial data creation.
 //this code is a probelm because when it uploads the images to the s3 bucket it gives it a broken image
 //but why?
-export const createProperty = async (req: Request, res: Response): Promise<void> => {
+export const addProperty = async (req: Request, res: Response): Promise<void> => {
   try {
     const files = req.files as Express.Multer.File[];
     const { address, city, state, country, postalCode, managerCognitoId, ...propertyData } = req.body;
