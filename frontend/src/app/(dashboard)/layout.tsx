@@ -21,30 +21,30 @@ import { NAVBAR_HEIGHT } from '@/lib/constants';
 // sidebar, and role-based access control.
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   // Authenticated user info retrieved from global API state
-  const { data: authUser, isLoading: authLoading } = useGetAuthUserQuery();
+  const { data: authenticatedUser, isLoading: isAuthLoading } = useGetAuthUserQuery();
 
   // Routing utilities for dashboard redirection
-  const router = useRouter();
-  const pathname = usePathname();
+  const routerInstance = useRouter();
+  const currentPath = usePathname();
 
   // Loading state ensures UI waits for role validation
-  const [isLoading, setIsLoading] = useState(true);
+  const [isRoleLoading, setIsLoading] = useState(true);
 
   // Role-based page protection:
   // Ensures managers cannot access tenant pages and tenants cannot access manager pages.
   useEffect(() => {
-    if (authUser) {
-      const userRole = authUser.userRole?.toLowerCase();
+    if (authenticatedUser) {
+      const userRole = authenticatedUser.userRole?.toLowerCase();
 
-      const navigatingToTenantPage = pathname.startsWith('/tenants');
-      const navigatingToManagerPage = pathname.startsWith('/managers');
+      const navigatingToTenantPageRoute = currentPath.startsWith('/tenants');
+      const navigatingToManagerPageRoute = currentPath.startsWith('/managers');
 
       // Redirects to correct dashboard home depending on authenticated role
       if (
-        (userRole === 'manager' && navigatingToTenantPage) ||
-        (userRole === 'tenant' && navigatingToManagerPage)
+        (userRole === 'manager' && navigatingToTenantPageRoute) ||
+        (userRole === 'tenant' && navigatingToManagerPageRoute)
       ) {
-        router.push(
+        routerInstance.push(
           userRole === 'manager'
             ? '/managers/properties'
             : '/tenants/favorites',
@@ -54,13 +54,13 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         setIsLoading(false);
       }
     }
-  }, [authUser, router, pathname]);
+  }, [authenticatedUser, routerInstance, currentPath]);
 
   // Loading fallback while verifying auth + role
-  if (authLoading || isLoading) return <>Loading...</>;
+  if (isAuthLoading || isRoleLoading) return <>Loading...</>;
 
   // Prevents layout from rendering without a valid user role
-  if (!authUser?.userRole) return null;
+  if (!authenticatedUser?.userRole) return null;
 
   return (
     <SidebarProvider>
@@ -72,7 +72,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         <div style={{ marginTop: `${NAVBAR_HEIGHT}px` }}>
           <main className='flex'>
             {/* Sidebar changes based on user role (manager or tenant) */}
-            <Sidebar userType={authUser.userRole.toLowerCase()} />
+            <Sidebar userType={authenticatedUser.userRole.toLowerCase()} />
 
             {/* Primary dashboard content area */}
             <div className='flex-grow transition-all duration-300'>

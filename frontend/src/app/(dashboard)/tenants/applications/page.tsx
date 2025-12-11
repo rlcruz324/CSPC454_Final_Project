@@ -7,19 +7,19 @@ import { useGetApplicationsQuery, useGetAuthUserQuery } from "@/state/api";
 import { CircleCheckBig, Clock, Download, XCircle } from "lucide-react";
 import React from "react";
 
-const Applications = () => {
-  const { data: authUser } = useGetAuthUserQuery();
+const TenantApplications = () => {
+  const { data: authenticatedUser } = useGetAuthUserQuery();
   const {
-    data: applications,
+    data: tenantApplications,
     isLoading,
     isError,
   } = useGetApplicationsQuery({
-    userId: authUser?.cognitoInfo?.userId,
-    userType: "tenant",
+    tenantUserId: authenticatedUser?.cognitoInfo?.userId,
+    accountRole: "tenant",
   });
 
   if (isLoading) return <Loading />;
-  if (isError || !applications) return <div>Error fetching applications</div>;
+  if (isError || !tenantApplications) return <div>Error fetching applications</div>;
 
   return (
     <div className="dashboard-container">
@@ -28,7 +28,7 @@ const Applications = () => {
         subtitle="Track and manage your property rental applications"
       />
       <div className="w-full">
-        {applications?.map((application) => (
+        {tenantApplications?.map((application) => (
           <ApplicationCard
             key={application.id}
             application={application}
@@ -68,4 +68,4 @@ const Applications = () => {
   );
 };
 
-export default Applications;
+export default TenantApplications;

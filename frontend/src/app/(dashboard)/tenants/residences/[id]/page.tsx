@@ -30,11 +30,11 @@ import {
 import { useParams } from "next/navigation";
 import React from "react";
 
-const PaymentMethod = () => {
+const BillingOptions = () => {
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden p-6 mt-10 md:mt-0 flex-1">
-      <h2 className="text-2xl font-bold mb-4">Payment method</h2>
-      <p className="mb-4">Change how you pay for your plan.</p>
+      <h2 className="text-2xl font-bold mb-4">Billing Options</h2>
+      <p className="mb-4">Choose a different way to pay for your plan.</p>
       <div className="border rounded-lg p-6">
         <div>
           {/* Card Info */}
@@ -45,14 +45,14 @@ const PaymentMethod = () => {
             <div className="flex flex-col justify-between">
               <div>
                 <div className="flex items-start gap-5">
-                  <h3 className="text-lg font-semibold">Visa ending in 2024</h3>
+                  <h3 className="text-lg font-semibold">Visa ending in 6767</h3>
                   <span className="text-sm font-medium border border-primary-700 text-primary-700 px-3 py-1 rounded-full">
                     Default
                   </span>
                 </div>
                 <div className="text-sm text-gray-500 flex items-center">
                   <CreditCard className="w-4 h-4 mr-1" />
-                  <span>Expiry • 26/06/2024</span>
+                  <span>Expiration Date • 26/06/2067</span>
                 </div>
               </div>
               <div className="text-sm text-gray-500 flex items-center">
@@ -75,7 +75,7 @@ const PaymentMethod = () => {
   );
 };
 
-const ResidenceCard = ({
+const TenantResidenceCard = ({
   property,
   currentLease,
 }: {
@@ -139,7 +139,7 @@ const ResidenceCard = ({
       <div className="flex justify-end gap-2 w-full">
         <button className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded-md flex items-center justify-center hover:bg-primary-700 hover:text-primary-50">
           <User className="w-5 h-5 mr-2" />
-          Manager
+          Current Manager
         </button>
         <button className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded-md flex items-center justify-center hover:bg-primary-700 hover:text-primary-50">
           <Download className="w-5 h-5 mr-2" />
@@ -226,7 +226,7 @@ const BillingHistory = ({ payments }: { payments: Payment[] }) => {
   );
 };
 
-const Residence = () => {
+const ResidenceOverview = () => {
   const { id } = useParams();
   const { data: authUser } = useGetAuthUserQuery();
   const {
@@ -256,9 +256,9 @@ const Residence = () => {
       <div className="w-full mx-auto">
         <div className="md:flex gap-10">
           {currentLease && (
-            <ResidenceCard property={property} currentLease={currentLease} />
+            <TenantResidenceCard property={property} currentLease={currentLease} />
           )}
-          <PaymentMethod />
+          <BillingOptions />
         </div>
         <BillingHistory payments={payments || []} />
       </div>
@@ -266,4 +266,4 @@ const Residence = () => {
   );
 };
 
-export default Residence;
+export default ResidenceOverview;

@@ -10,12 +10,12 @@ import {
 } from "@/state/api";
 import React from "react";
 
-const Residences = () => {
-  const { data: authUser } = useGetAuthUserQuery();
-  const { data: tenant } = useGetTenantQuery(
-    authUser?.cognitoInfo?.userId || "",
+const TenantResidences = () => {
+  const { data: authenticatedUser } = useGetAuthUserQuery();
+  const { data: tenantData } = useGetTenantQuery(
+    authenticatedUser?.cognitoInfo?.userId || "",
     {
-      skip: !authUser?.cognitoInfo?.userId,
+      skip: !authenticatedUser?.cognitoInfo?.userId,
     }
   );
 
@@ -23,8 +23,8 @@ const Residences = () => {
     data: currentResidences,
     isLoading,
     error,
-  } = useGetCurrentResidencesQuery(authUser?.cognitoInfo?.userId || "", {
-    skip: !authUser?.cognitoInfo?.userId,
+  } = useGetCurrentResidencesQuery(authenticatedUser?.cognitoInfo?.userId || "", {
+    skip: !authenticatedUser?.cognitoInfo?.userId,
   });
 
   if (isLoading) return <Loading />;
@@ -41,7 +41,7 @@ const Residences = () => {
           <Card
             key={property.id}
             property={property}
-            isFavorite={tenant?.favorites.includes(property.id) || false}
+            isFavorite={tenantData?.favorites.includes(property.id) || false}
             onFavoriteToggle={() => {}}
             showFavoriteButton={false}
             propertyLink={`/tenants/residences/${property.id}`}
@@ -49,10 +49,10 @@ const Residences = () => {
         ))}
       </div>
       {(!currentResidences || currentResidences.length === 0) && (
-        <p>You don&lsquo;t have any current residences</p>
+        <p>You don&lsquo;t have any current residences yet uwu </p>
       )}
     </div>
   );
 };
 
-export default Residences;
+export default TenantResidences;

@@ -307,12 +307,12 @@ export const api = createApi({
     // Application endpoints
     getApplications: build.query<
       Application[],
-      { userId?: string; userType?: string }
+      { tenantUserId?: string; accountRole?: string }
     >({
       query: (params) => {
         const queryParams = new URLSearchParams()
-        if (params.userId) queryParams.append('userId', params.userId.toString())
-        if (params.userType) queryParams.append('userType', params.userType)
+        if (params.tenantUserId) queryParams.append('userId', params.tenantUserId.toString())
+        if (params.accountRole) queryParams.append('userType', params.accountRole)
 
         return `applications?${queryParams.toString()}`
       },

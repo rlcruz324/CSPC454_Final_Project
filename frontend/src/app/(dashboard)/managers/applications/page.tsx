@@ -23,8 +23,8 @@ const ManagerApplicationsPage = () => {
     isError,
   } = useFetchApplicationsQuery(
     {
-      userId: authUser?.cognitoInfo?.userId,
-      userType: "manager",
+      tenantUserId: authUser?.cognitoInfo?.userId,
+      accountRole: "manager",
     },
     {
       skip: !authUser?.cognitoInfo?.userId,

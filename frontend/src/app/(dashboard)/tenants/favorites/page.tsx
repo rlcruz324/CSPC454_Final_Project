@@ -1,16 +1,11 @@
 'use client';
 
-/* React / framework imports */
 import React from 'react';
-
-/* Project state modules */
 import {
   useGetAuthUserQuery,
-  useGetPropertiesQuery,
-  useGetTenantQuery,
+  useGetPropertiesQuery as useFetchFavoritePropertiesQuery,
+  useGetTenantQuery as useFetchTenantDataQuery,
 } from '@/state/api';
-
-/* UI components */
 import Card from '@/components/Card';
 import Header from '@/components/Header';
 import Loading from '@/components/Loading';
@@ -18,17 +13,17 @@ import Loading from '@/components/Loading';
 /* Favorites page component
    Fetches the authenticated user, derives tenant data, loads favorited
    properties, and renders them in a responsive grid layout. */
-const Favorites = () => {
+const TenantFavoriteProperties = () => {
   /* Retrieve authenticated user information.
      Authenticated user data determines whether tenant data should load. */
-  const { data: authUser } = useGetAuthUserQuery();
+  const { data: authenticatedUser } = useGetAuthUserQuery();
 
   /* Fetch tenant details only when a valid userId exists.
      Skip logic prevents unnecessary fetches before auth is available. */
-  const { data: tenant } = useGetTenantQuery(
-    authUser?.cognitoInfo?.userId || '',
+  const { data: tenant } = useFetchTenantDataQuery(
+    authenticatedUser?.cognitoInfo?.userId || '',
     {
-      skip: !authUser?.cognitoInfo?.userId,
+      skip: !authenticatedUser?.cognitoInfo?.userId,
     }
   );
 
@@ -39,14 +34,14 @@ const Favorites = () => {
     data: favoriteProperties,
     isLoading,
     error,
-  } = useGetPropertiesQuery(
+  } = useFetchFavoritePropertiesQuery(
     { favoriteIds: tenant?.favorites?.map((fav: { id: number }) => fav.id) },
     { skip: !tenant?.favorites || tenant?.favorites.length === 0 }
   );
 
   /* Handle loading and error states before rendering content. */
   if (isLoading) return <Loading />;
-  if (error) return <div>Error loading favorites</div>;
+  if (error) return <div>Error loading favorites uwu</div>;
 
   /* Render results, including message when no favorites are available. */
   return (
@@ -70,13 +65,13 @@ const Favorites = () => {
       </div>
 
       {(!favoriteProperties || favoriteProperties.length === 0) && (
-        <p>You don&rsquo;t have any favorited properties</p>
+        <p>You don&rsquo;t have any favorited properties yet :D</p>
       )}
     </div>
   );
 };
 
-export default Favorites;
+export default TenantFavoriteProperties;
 
 /* Summary:
    Renders the Favorites page by loading authenticated user info,

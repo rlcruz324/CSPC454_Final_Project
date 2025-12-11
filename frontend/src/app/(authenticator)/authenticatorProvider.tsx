@@ -40,7 +40,7 @@ Amplify.configure({
 
 //Custom UI components for branding and layout
 //Text, colors, and structure in this section can be updated
-const components = {
+const customAuthenticatorComponents = {
   Header() {
     return (
       <View className="mt-4 mb-7">
@@ -126,7 +126,7 @@ const components = {
 };
 
 //Form field labels, placeholders, and order can be modified
-const formFields = {
+const authenticationFormFields = {
   signIn: {
     username: {
       placeholder: "Enter your email",
@@ -170,28 +170,28 @@ const formFields = {
 
 // Authentication wrapper that controls routing logic
 // Redirect behavior and protected routes can be adjusted
-const Auth = ({ children }: { children: React.ReactNode }) => {
+const AuthenticatorWrapper = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuthenticator((context) => [context.user]);
-  const router = useRouter();
-  const pathname = usePathname();
+  const routerInstance = useRouter();
+  const currentPathname = usePathname();
 
   // Paths for login or signup can be adjusted
-  const isAuthPage = pathname.match(/^\/(signin|signup)$/);
+  const isAuthPageRoute = currentPathname.match(/^\/(signin|signup)$/);
 
   // Dashboard paths can be expanded if more roles are added
-  const isDashboardPage =
-    pathname.startsWith("/manager") || pathname.startsWith("/tenants");
+  const isDashboardPageRoute =
+    currentPathname.startsWith("/manager") || currentPathname.startsWith("/tenants");
 
   // Redirect logged-in users away from auth pages
   // Redirect destination can be changed
   useEffect(() => {
-    if (user && isAuthPage) {
-      router.push("/");
+    if (user && isAuthPageRoute) {
+      routerInstance.push("/");
     }
-  }, [user, isAuthPage, router]);
+  }, [user, isAuthPageRoute, routerInstance]);
 
   // Allow non-auth pages to render normally
-  if (!isAuthPage && !isDashboardPage) {
+  if (!isAuthPageRoute && !isDashboardPageRoute) {
     return <>{children}</>;
   }
 
@@ -199,9 +199,9 @@ const Auth = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="h-full">
       <Authenticator
-        initialState={pathname.includes("signup") ? "signUp" : "signIn"}
-        components={components}
-        formFields={formFields}
+        initialState={currentPathname.includes("signup") ? "signUp" : "signIn"}
+        components={customAuthenticatorComponents}
+        formFields={authenticationFormFields}
       >
         {() => <>{children}</>}
       </Authenticator>
@@ -209,4 +209,4 @@ const Auth = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default Auth;
+export default AuthenticatorWrapper;

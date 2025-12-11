@@ -7,7 +7,7 @@ import {
 } from "@/state/api";
 import React from "react";
 
-const TenantSettings = () => {
+const TenantAccountSettings = () => {
   const { data: authUser, isLoading } = useGetAuthUserQuery();
   const [updateTenant] = useUpdateTenantSettingsMutation();
 
@@ -35,4 +35,4 @@ const TenantSettings = () => {
   );
 };
 
-export default TenantSettings;
+export default TenantAccountSettings;
