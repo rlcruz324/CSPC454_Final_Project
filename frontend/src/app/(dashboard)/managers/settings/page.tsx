@@ -7,32 +7,32 @@ import {
 } from "@/state/api";
 import React from "react";
 
-const ManagerSettings = () => {
-  const { data: authUser, isLoading } = useGetAuthUserQuery();
+const ManagerSettingsPage = () => {
+  const { data: authenticatedUser, isLoading: isFetchingUser } = useGetAuthUserQuery();
   const [updateManager] = useUpdateManagerSettingsMutation();
 
-  if (isLoading) return <>Loading...</>;
+  if (isFetchingUser) return <>Loading...</>;
 
-  const initialData = {
-    name: authUser?.userInfo.name,
-    email: authUser?.userInfo.email,
-    phoneNumber: authUser?.userInfo.phoneNumber,
+  const userSettingsInitialValues = {
+    name: authenticatedUser?.userInfo.name,
+    email: authenticatedUser?.userInfo.email,
+    phoneNumber: authenticatedUser?.userInfo.phoneNumber,
   };
 
-  const handleSubmit = async (data: typeof initialData) => {
+  const submitManagerSettings = async (data: typeof userSettingsInitialValues) => {
     await updateManager({
-      cognitoId: authUser?.cognitoInfo?.userId,
+      cognitoId: authenticatedUser?.cognitoInfo?.userId,
       ...data,
     });
   };
 
   return (
     <SettingsForm
-      initialData={initialData}
-      onSubmit={handleSubmit}
+      initialData={userSettingsInitialValues}
+      onSubmit={submitManagerSettings}
       userType="manager"
     />
   );
 };
 
-export default ManagerSettings;
+export default ManagerSettingsPage;

@@ -21,22 +21,22 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import React from "react";
 
-const PropertyTenants = () => {
+const ManagerPropertyTenants = () => {
   const { id } = useParams();
-  const propertyId = Number(id);
+  const numericPropertyId = Number(id);
 
-  const { data: property, isLoading: propertyLoading } =
-    useGetPropertyQuery(propertyId);
-  const { data: leases, isLoading: leasesLoading } =
-    useGetPropertyLeasesQuery(propertyId);
-  const { data: payments, isLoading: paymentsLoading } =
-    useGetPaymentsQuery(propertyId);
+  const { data: propertyData, isLoading: isPropertyLoading } =
+    useGetPropertyQuery(numericPropertyId);
+  const { data: propertyLeases, isLoading: isLeasesLoading } =
+    useGetPropertyLeasesQuery(numericPropertyId);
+  const { data: propertyPayments, isLoading: isPaymentsLoading } =
+    useGetPaymentsQuery(numericPropertyId);
 
-  if (propertyLoading || leasesLoading || paymentsLoading) return <Loading />;
+  if (isPropertyLoading || isLeasesLoading || isPaymentsLoading) return <Loading />;
 
-  const getCurrentMonthPaymentStatus = (leaseId: number) => {
+  const fetchCurrentMonthPaymentStatus = (leaseId: number) => {
     const currentDate = new Date();
-    const currentMonthPayment = payments?.find(
+    const currentMonthPayment = propertyPayments?.find(
       (payment) =>
         payment.leaseId === leaseId &&
         new Date(payment.dueDate).getMonth() === currentDate.getMonth() &&
@@ -47,18 +47,18 @@ const PropertyTenants = () => {
 
   return (
     <div className="dashboard-container">
-      {/* Back to properties page */}
+      {/* Return the the properties page */}
       <Link
         href="/managers/properties"
         className="flex items-center mb-4 hover:text-primary-500"
         scroll={false}
       >
         <ArrowLeft className="w-4 h-4 mr-2" />
-        <span>Back to Properties</span>
+        <span>Return to Properties</span>
       </Link>
 
       <Header
-        title={property?.name || "My Property"}
+        title={propertyData?.name || "My Property"}
         subtitle="Manage tenants and leases for this property"
       />
 
@@ -68,7 +68,7 @@ const PropertyTenants = () => {
             <div>
               <h2 className="text-2xl font-bold mb-1">Tenants Overview</h2>
               <p className="text-sm text-gray-500">
-                Manage and view all tenants for this property.
+                View and handle all residents of this property
               </p>
             </div>
             <div>
@@ -95,7 +95,7 @@ const PropertyTenants = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {leases?.map((lease) => (
+                {propertyLeases?.map((lease) => (
                   <TableRow key={lease.id} className="h-24">
                     <TableCell>
                       <div className="flex items-center space-x-3">
@@ -126,15 +126,15 @@ const PropertyTenants = () => {
                     <TableCell>
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                          getCurrentMonthPaymentStatus(lease.id) === "Paid"
+                          fetchCurrentMonthPaymentStatus(lease.id) === "Paid"
                             ? "bg-green-100 text-green-800 border-green-300"
                             : "bg-red-100 text-red-800 border-red-300"
                         }`}
                       >
-                        {getCurrentMonthPaymentStatus(lease.id) === "Paid" && (
+                        {fetchCurrentMonthPaymentStatus(lease.id) === "Paid" && (
                           <Check className="w-4 h-4 inline-block mr-1" />
                         )}
-                        {getCurrentMonthPaymentStatus(lease.id)}
+                        {fetchCurrentMonthPaymentStatus(lease.id)}
                       </span>
                     </TableCell>
                     <TableCell>{lease.tenant.phoneNumber}</TableCell>
@@ -158,4 +158,4 @@ const PropertyTenants = () => {
   );
 };
 
-export default PropertyTenants;
+export default ManagerPropertyTenants;
