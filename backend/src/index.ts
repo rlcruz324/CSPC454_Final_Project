@@ -10,7 +10,7 @@ import morgan from "morgan";
 dotenv.config();
 
 //Internal Modules
-import { authMiddleware } from './middleware/authorizationMiddleware';
+import { requireRole } from './middleware/requireRolesMiddleware';
 import tenantRoutes from './routes/tenantRoutes';
 import managerRoutes from './routes/managerRoutes';
 import propertyRoutes from './routes/propertyRoutes';
@@ -57,8 +57,8 @@ app.get("/", (req, res) => {
 app.use("/applications", applicationRoutes);
 app.use("/properties", propertyRoutes);
 app.use("/leases", leaseRoutes);
-app.use("/tenants", authMiddleware(["tenant"]), tenantRoutes);
-app.use("/managers", authMiddleware(["manager"]), managerRoutes);
+app.use("/tenants", requireRole(["tenant"]), tenantRoutes);
+app.use("/managers", requireRole(["manager"]), managerRoutes);
 
 //Add Error Middleware here later???
 

@@ -1,9 +1,5 @@
 "use strict";
-//Handlers for retrieving leases and lease payments.
-//Provides controller functions for fetching all leases with
-//related tenant and property data, and for retrieving payment records for a
-//specific lease. Includes Prisma queries, error handling, and structured JSON
-//responses.
+//Problematic Component always returns errors
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -15,13 +11,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getLeasePayments = exports.getLeases = void 0;
-//Third-party libraries
-//Project modules (lib, utils, state, constants)
 const client_1 = require("@prisma/client");
-//Prisma client instance for database operations. Shared across handlers.
 const prisma = new client_1.PrismaClient();
-//Retrieves all leases, including related tenant and property data.
-//Enables frontend to display complete lease information in one request.
+//Controller getLeases start
 const getLeases = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const leases = yield prisma.lease.findMany({
@@ -42,6 +34,7 @@ exports.getLeases = getLeases;
 //Retrieves all payments associated with a specific lease ID.
 //Converts the ID param to a number before querying the database.
 //Useful for showing detailed payment history in UI.
+//Controller getLeasePayments
 const getLeasePayments = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;

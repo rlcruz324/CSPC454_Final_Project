@@ -14,10 +14,10 @@ import { S3Client } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
 import axios from 'axios';
 
-//Project modules (lib, utils, state, constants)
+//project modules (lib, utils, state, constants)
 import { Location } from '@prisma/client';
 
-//Prisma client instance for database access.
+//prisma client instance for database access.
 const prisma = new PrismaClient();
 
 //AWS S3 client configuration for uploading property photos.
@@ -25,8 +25,8 @@ const s3Client = new S3Client({
   region: process.env.AWS_REGION,
 });
 
-//Retrieves multiple properties with dynamic filtering based on query parameters.
-//Builds a raw SQL query using Prisma.sql, allowing expressive conditions and spatial operations.
+//retrieves multiple properties with dynamic filtering based on query parameters.
+//builds a raw SQL query using Prisma.sql, allowing expressive conditions and spatial operations.
 export const getProperties = async (
   req: Request,
   res: Response
@@ -218,12 +218,12 @@ export const getProperty = async (
 };
 
 
-import { GetObjectCommand } from '@aws-sdk/client-s3';
-const streamToBuffer = require('stream-to-buffer');
-
-
-
-
+//Creates a property, uploads photos to S3, performs geocoding, inserts a location,
+//and saves final property data to the database. 
+//Handles array parsing, numeric
+//conversions, and spatial data creation.
+//this code is a probelm because when it uploads the images to the s3 bucket it gives it a broken image
+//but why?
 export const createProperty = async (req: Request, res: Response): Promise<void> => {
   try {
     const files = req.files as Express.Multer.File[];
@@ -315,9 +315,7 @@ export const createProperty = async (req: Request, res: Response): Promise<void>
   }
 };
 
-//Creates a property, uploads photos to S3, performs geocoding, inserts a location,
-//and saves final property data to the database. Handles array parsing, numeric
-//conversions, and spatial data creation.
+
 // export const createProperty = async (
 //   req: Request,
 //   res: Response

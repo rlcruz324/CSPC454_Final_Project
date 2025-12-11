@@ -13,7 +13,7 @@ const morgan_1 = __importDefault(require("morgan"));
 //Environment
 dotenv_1.default.config();
 //Internal Modules
-const authorizationMiddleware_1 = require("./middleware/authorizationMiddleware");
+const requireRolesMiddleware_1 = require("./middleware/requireRolesMiddleware");
 const tenantRoutes_1 = __importDefault(require("./routes/tenantRoutes"));
 const managerRoutes_1 = __importDefault(require("./routes/managerRoutes"));
 const propertyRoutes_1 = __importDefault(require("./routes/propertyRoutes"));
@@ -53,8 +53,8 @@ app.get("/", (req, res) => {
 app.use("/applications", applicationRoutes_1.default);
 app.use("/properties", propertyRoutes_1.default);
 app.use("/leases", leaseRoutes_1.default);
-app.use("/tenants", (0, authorizationMiddleware_1.authMiddleware)(["tenant"]), tenantRoutes_1.default);
-app.use("/managers", (0, authorizationMiddleware_1.authMiddleware)(["manager"]), managerRoutes_1.default);
+app.use("/tenants", (0, requireRolesMiddleware_1.requireRole)(["tenant"]), tenantRoutes_1.default);
+app.use("/managers", (0, requireRolesMiddleware_1.requireRole)(["manager"]), managerRoutes_1.default);
 //Add Error Middleware here later???
 //Server Listener
 const port = Number(process.env.PORT) || 3002;

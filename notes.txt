@@ -211,6 +211,7 @@ ran npm run prisma:generate
 creates index.d.ts in frontend/src/types This step would have to happen again if I change this to a car platform
 npx prisma migrate dev --name init
 this initialises our migrations
+
 prisma 7 was still installed globally and caused issues
 delete prisma 7 globally
 

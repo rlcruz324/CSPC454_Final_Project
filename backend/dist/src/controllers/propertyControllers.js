@@ -34,14 +34,14 @@ const wkt_1 = require("@terraformer/wkt");
 const client_s3_1 = require("@aws-sdk/client-s3");
 const lib_storage_1 = require("@aws-sdk/lib-storage");
 const axios_1 = __importDefault(require("axios"));
-//Prisma client instance for database access.
+//prisma client instance for database access.
 const prisma = new client_1.PrismaClient();
 //AWS S3 client configuration for uploading property photos.
 const s3Client = new client_s3_1.S3Client({
     region: process.env.AWS_REGION,
 });
-//Retrieves multiple properties with dynamic filtering based on query parameters.
-//Builds a raw SQL query using Prisma.sql, allowing expressive conditions and spatial operations.
+//retrieves multiple properties with dynamic filtering based on query parameters.
+//builds a raw SQL query using Prisma.sql, allowing expressive conditions and spatial operations.
 const getProperties = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { favoriteIds, priceMin, priceMax, beds, baths, propertyType, squareFeetMin, squareFeetMax, amenities, availableFrom, latitude, longitude, } = req.query;
@@ -170,7 +170,12 @@ const getProperty = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.getProperty = getProperty;
-const streamToBuffer = require('stream-to-buffer');
+//Creates a property, uploads photos to S3, performs geocoding, inserts a location,
+//and saves final property data to the database. 
+//Handles array parsing, numeric
+//conversions, and spatial data creation.
+//this code is a probelm because when it uploads the images to the s3 bucket it gives it a broken image
+//but why?
 const createProperty = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     try {
@@ -230,9 +235,6 @@ const createProperty = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.createProperty = createProperty;
-//Creates a property, uploads photos to S3, performs geocoding, inserts a location,
-//and saves final property data to the database. Handles array parsing, numeric
-//conversions, and spatial data creation.
 // export const createProperty = async (
 //   req: Request,
 //   res: Response

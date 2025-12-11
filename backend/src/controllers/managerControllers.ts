@@ -4,7 +4,6 @@
 //coordinate conversion, integrates Prisma ORM operations, and returns structured JSON responses.
 
 
-// Third-party libraries
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { wktToGeoJSON } from '@terraformer/wkt';

@@ -1,28 +1,31 @@
 "use strict";
+//Middleware that checks the user's JWT and only allows 
+//access if their role is permitted.
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.authMiddleware = void 0;
+exports.requireRole = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const authMiddleware = (allowedRoles) => {
+//role-based authorization middleware
+const requireRole = (allowedRoles) => {
     return (req, res, next) => {
         var _a;
         const token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(' ')[1];
         if (!token) {
-            res.status(401).json({ message: 'Unauthorized' });
+            res.status(401).json({ message: 'Missing or invalid authorization token' });
             return;
         }
         try {
-            const decoded = jsonwebtoken_1.default.decode(token);
-            const userRole = decoded['custom:role'] || '';
+            const decodedToken = jsonwebtoken_1.default.decode(token);
+            const userRole = decodedToken['custom:role'] || '';
             req.user = {
-                id: decoded.sub,
+                id: decodedToken.sub,
                 role: userRole,
             };
-            const hasAccess = allowedRoles.includes(userRole.toLowerCase());
-            if (!hasAccess) {
-                res.status(403).json({ message: 'Access Denied' });
+            const isAllowed = allowedRoles.includes(userRole.toLowerCase());
+            if (!isAllowed) {
+                res.status(403).json({ message: 'Forbidden: insufficient role' });
                 return;
             }
         }
@@ -34,4 +37,13 @@ const authMiddleware = (allowedRoles) => {
         next();
     };
 };
-exports.authMiddleware = authMiddleware;
+exports.requireRole = requireRole;
+//authorization middleware end
+//Functions & Variables:
+//requireRole(allowedRoles): Main function that returns the actual middleware.
+//allowedRoles: Array of roles allowed to access the route.
+//token: The raw JWT taken from the Authorization header.
+//decodedToken: The token's payload after decoding.
+//userRole: The role extracted from the decoded token ("custom:role").
+//req.user: Object attached to the request containing the user’s ID and role.
+//isAllowed: Boolean indicating whether the user's role matches any allowed role.

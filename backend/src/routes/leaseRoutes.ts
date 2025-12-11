@@ -7,7 +7,7 @@
 import express from 'express';
 
 // Project modules (lib, utils, state, constants)
-import { authMiddleware } from '../middleware/authorizationMiddleware';
+import { requireRole } from '../middleware/requireRolesMiddleware';
 
 // Local components
 import { getLeasePayments, getLeases } from '../controllers/leaseControllers';
@@ -17,12 +17,12 @@ const router = express.Router();
 
 // Retrieves all leases accessible by authorized managers or tenants.
 // Useful for displaying lease summaries or dashboards.
-router.get('/', authMiddleware(['manager', 'tenant']), getLeases);
+router.get('/', requireRole(['manager', 'tenant']), getLeases);
 // Retrieves payment history for a specific lease based on its ID.
 // Authorization ensures only allowed roles can view payment details.
 router.get(
   '/:id/payments',
-  authMiddleware(['manager', 'tenant']),
+  requireRole(['manager', 'tenant']),
   getLeasePayments
 );
 
