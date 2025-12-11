@@ -1,8 +1,8 @@
 "use client";
 
-import ApplicationCard from "@/components/ApplicationCard";
-import Header from "@/components/Header";
-import Loading from "@/components/Loading";
+import PropertyApplicationCard from "@/components/PropertyApplicationCard";
+import ContentHeader from "@/components/ContentHeader";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   useGetApplicationsQuery as useFetchApplicationsQuery,
@@ -36,7 +36,7 @@ const ManagerApplicationsPage = () => {
     await updateApplicationStatus({ id, status });
   };
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <LoadingSpinner />;
   if (isError || !applications) return <div>Error fetching applications</div>;
 
   const filteredByStatusApplications = applications?.filter((application) => {
@@ -46,7 +46,7 @@ const ManagerApplicationsPage = () => {
 
   return (
     <div className="dashboard-container">
-      <Header
+      <ContentHeader
         title="Applications"
         subtitle="View and manage applications for your properties"
       />
@@ -69,7 +69,7 @@ const ManagerApplicationsPage = () => {
                   tab === "all" || application.status.toLowerCase() === tab
               )
               .map((application) => (
-                <ApplicationCard
+                <PropertyApplicationCard
                   key={application.id}
                   application={application}
                   userType="manager"
@@ -164,7 +164,7 @@ const ManagerApplicationsPage = () => {
                       )}
                     </div>
                   </div>
-                </ApplicationCard>
+                </PropertyApplicationCard>
               ))}
           </TabsContent>
         ))}

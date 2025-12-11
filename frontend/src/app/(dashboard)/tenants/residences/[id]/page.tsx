@@ -1,6 +1,6 @@
 "use client";
 
-import Loading from "@/components/Loading";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import {
   Table,
   TableBody,
@@ -244,7 +244,7 @@ const ResidenceOverview = () => {
     { skip: !leases?.[0]?.id }
   );
 
-  if (propertyLoading || leasesLoading || paymentsLoading) return <Loading />;
+  if (propertyLoading || leasesLoading || paymentsLoading) return <LoadingSpinner />;
   if (!property || propertyError) return <div>Error loading property</div>;
 
   const currentLease = leases?.find(

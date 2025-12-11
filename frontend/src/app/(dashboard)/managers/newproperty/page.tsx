@@ -1,7 +1,7 @@
 "use client";
 
-import { CustomFormField } from "@/components/FormField";
-import Header from "@/components/Header";
+import { CustomFormField } from "@/components/CustomFormField";
+import ContentHeader from "@/components/ContentHeader";
 import { Form } from "@/components/ui/form";
 import { PropertyFormData, propertySchema } from "@/lib/schemas";
 import { useCreatePropertyMutation as useCreateNewPropertyMutation, useGetAuthUserQuery as useFetchAuthenticatedUserQuery } from "@/state/api";
@@ -65,7 +65,7 @@ const PropertyCreationPage = () => {
 
   return (
     <div className="dashboard-container">
-      <Header
+      <ContentHeader
         title="Add New Property"
         subtitle="Create a new property listing with detailed information"
       />

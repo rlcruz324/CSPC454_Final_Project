@@ -1,6 +1,6 @@
 "use client";
 
-import SettingsForm from "@/components/SettingsForm";
+import SettingsForm from "@/components/UserSettingsForm";
 import {
   useGetAuthUserQuery,
   useUpdateTenantSettingsMutation,
@@ -28,8 +28,8 @@ const TenantAccountSettings = () => {
 
   return (
     <SettingsForm
-      initialManagerSettings={initialData}
-      submitManagerSettingsForm={handleSubmit}
+      defaultSettings={initialData}
+      onSaveManagerSettings={handleSubmit}
       roleType="tenant"
     />
   );

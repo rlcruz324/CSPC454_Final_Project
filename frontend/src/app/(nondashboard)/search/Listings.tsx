@@ -7,9 +7,9 @@ import {
 } from "@/state/api";
 import { useAppSelector } from "@/state/redux";
 import { Property } from "@/types/prismaTypes";
-import Card from "@/components/Card";
+import PropertyCard from "@/components/PropertyCard";
 import React from "react";
-import CardCompact from "@/components/CardCompact";
+import MiniPropertyCard from "@/components/MiniPropertyCard";
 
 const Listings = () => {
   const { data: authUser } = useGetAuthUserQuery();
@@ -65,7 +65,7 @@ const Listings = () => {
         <div className="p-4 w-full">
           {properties?.map((property) =>
             viewMode === "grid" ? (
-              <Card
+              <PropertyCard
                 key={property.id}
                 property={property}
                 isFavorite={
@@ -78,7 +78,7 @@ const Listings = () => {
                 propertyLink={`/search/${property.id}`}
               />
             ) : (
-              <CardCompact
+              <MiniPropertyCard
                 key={property.id}
                 property={property}
                 isFavorite={

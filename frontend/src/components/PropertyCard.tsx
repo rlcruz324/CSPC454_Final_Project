@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React, { useState } from 'react'
 
-const Card = ({
+const PropertyCard = ({
   property,
   isFavorite,
   onFavoriteToggle,
@@ -105,4 +105,4 @@ const Card = ({
   );
 };
 
-export default Card;
+export default PropertyCard;

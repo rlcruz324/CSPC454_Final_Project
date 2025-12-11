@@ -6,9 +6,9 @@ import {
   useGetPropertiesQuery as useFetchFavoritePropertiesQuery,
   useGetTenantQuery as useFetchTenantDataQuery,
 } from '@/state/api';
-import Card from '@/components/Card';
-import Header from '@/components/Header';
-import Loading from '@/components/Loading';
+import PropertyCard from '@/components/PropertyCard';
+import ContentHeader from '@/components/ContentHeader';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 /* Favorites page component
    Fetches the authenticated user, derives tenant data, loads favorited
@@ -40,20 +40,20 @@ const TenantFavoriteProperties = () => {
   );
 
   /* Handle loading and error states before rendering content. */
-  if (isLoading) return <Loading />;
+  if (isLoading) return <LoadingSpinner />;
   if (error) return <div>Error loading favorites uwu</div>;
 
   /* Render results, including message when no favorites are available. */
   return (
     <div className='dashboard-container'>
-      <Header
+      <ContentHeader
         title='Favorited Properties'
         subtitle='Browse and manage saved property listings'
       />
 
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
         {favoriteProperties?.map((property) => (
-          <Card
+          <PropertyCard
             key={property.id}
             property={property}
             isFavorite={true}

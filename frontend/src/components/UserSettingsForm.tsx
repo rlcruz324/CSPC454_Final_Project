@@ -13,16 +13,16 @@ import { Form } from "./ui/form";
 import { Button } from "./ui/button";
 
 //Local reusable form field component
-import { CustomFormField } from "./FormField";
+import { CustomFormField } from "./CustomFormField";
 
 
 const SettingsForm = ({
-  initialManagerSettings: initialData,
-  submitManagerSettingsForm: onSubmit,
+  defaultSettings: initialData,
+  onSaveManagerSettings: onSubmit,
   roleType: userType,
 }: SettingsFormProps) => {
   // Tracks whether inputs are editable or locked for display only
-  const [editMode, setEditMode] = useState(false);
+  const [isEditing, setEditMode] = useState(false);
 
   // Form initialization with validation and default values
   const form = useForm<SettingsFormData>({
@@ -31,15 +31,15 @@ const SettingsForm = ({
   });
 
   // Toggles input editability and restores original values when exiting edit mode
-  const toggleEditMode = () => {
-    setEditMode(!editMode);
-    if (editMode) {
+  const toggleEditing = () => {
+    setEditMode(!isEditing);
+    if (isEditing) {
       form.reset(initialData); // Reverts unsaved edits
     }
   };
 
   // Handles validated form submission and triggers parent callback
-  const handleSubmit = async (data: SettingsFormData) => {
+  const handleSubmitFormData = async (data: SettingsFormData) => {
     await onSubmit(data); // Sends data to API or parent component
     setEditMode(false);   // Returns form to read-only mode
   };
@@ -60,37 +60,37 @@ const SettingsForm = ({
       <div className="bg-white rounded-xl p-6">
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(handleSubmit)} // React Hook Form submit handler
+            onSubmit={form.handleSubmit(handleSubmitFormData)} // React Hook Form submit handler
             className="space-y-6"
           >
             {/* Individual input fields using shared form component */}
-            <CustomFormField name="name" label="Name" disabled={!editMode} />
+            <CustomFormField name="name" label="Name" disabled={!isEditing} />
 
             <CustomFormField
               name="email"
               label="Email"
               type="email"
-              disabled={!editMode}
+              disabled={!isEditing}
             />
 
             <CustomFormField
               name="phoneNumber"
               label="Phone Number"
-              disabled={!editMode}
+              disabled={!isEditing}
             />
 
             {/* Footer actions: Edit/Cancel + Save Changes */}
             <div className="pt-4 flex justify-between">
               <Button
                 type="button"
-                onClick={toggleEditMode}
+                onClick={toggleEditing}
                 className="bg-secondary-500 text-white hover:bg-secondary-600"
               >
-                {editMode ? "Cancel" : "Edit"}
+                {isEditing ? "Cancel" : "Edit"}
               </Button>
 
               {/* Save button appears only in edit mode */}
-              {editMode && (
+              {isEditing && (
                 <Button
                   type="submit"
                   className="bg-primary-700 text-white hover:bg-primary-800"

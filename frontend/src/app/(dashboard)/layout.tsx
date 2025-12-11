@@ -11,7 +11,7 @@ import { useGetAuthUserQuery } from '@/state/api';
 
 // 4. Internal components (layout and UI structure)
 import Navbar from '@/components/NavigationBar';
-import Sidebar from '@/components/AppSidebar';
+import Sidebar from '@/components/RoleSidebar';
 import { SidebarProvider } from '@/components/ui/sidebar';
 
 // 5. Project constants

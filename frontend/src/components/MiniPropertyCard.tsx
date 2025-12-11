@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 
-const CardCompact = ({
+const MiniPropertyCard = ({
   property,
   isFavorite,
   onFavoriteToggle,
@@ -106,4 +106,4 @@ const CardCompact = ({
   );
 };
 
-export default CardCompact;
+export default MiniPropertyCard;

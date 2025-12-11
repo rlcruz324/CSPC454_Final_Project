@@ -1,8 +1,8 @@
 "use client";
 
-import Card from "@/components/Card";
-import Header from "@/components/Header";
-import Loading from "@/components/Loading";
+import PropertyCard from "@/components/PropertyCard";
+import ContentHeader from "@/components/ContentHeader";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import {
   useGetAuthUserQuery,
   useGetCurrentResidencesQuery,
@@ -27,18 +27,18 @@ const TenantResidences = () => {
     skip: !authenticatedUser?.cognitoInfo?.userId,
   });
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <LoadingSpinner />;
   if (error) return <div>Error loading current residences</div>;
 
   return (
     <div className="dashboard-container">
-      <Header
+      <ContentHeader
         title="Current Residences"
         subtitle="View and manage your current living spaces"
       />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {currentResidences?.map((property) => (
-          <Card
+          <PropertyCard
             key={property.id}
             property={property}
             isFavorite={tenantData?.favorites.includes(property.id) || false}

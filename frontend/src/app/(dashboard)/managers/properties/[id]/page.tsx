@@ -1,7 +1,7 @@
 "use client";
 
-import Header from "@/components/Header";
-import Loading from "@/components/Loading";
+import ContentHeader from "@/components/ContentHeader";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import {
   Table,
   TableBody,
@@ -32,7 +32,7 @@ const ManagerPropertyTenants = () => {
   const { data: propertyPayments, isLoading: isPaymentsLoading } =
     useGetPaymentsQuery(numericPropertyId);
 
-  if (isPropertyLoading || isLeasesLoading || isPaymentsLoading) return <Loading />;
+  if (isPropertyLoading || isLeasesLoading || isPaymentsLoading) return <LoadingSpinner />;
 
   const fetchCurrentMonthPaymentStatus = (leaseId: number) => {
     const currentDate = new Date();
@@ -57,7 +57,7 @@ const ManagerPropertyTenants = () => {
         <span>Return to Properties</span>
       </Link>
 
-      <Header
+      <ContentHeader
         title={propertyData?.name || "My Property"}
         subtitle="Manage tenants and leases for this property"
       />

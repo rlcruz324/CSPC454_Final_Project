@@ -1,8 +1,8 @@
 "use client";
 
-import ApplicationCard from "@/components/ApplicationCard";
-import Header from "@/components/Header";
-import Loading from "@/components/Loading";
+import PropertyApplicationCard from "@/components/PropertyApplicationCard";
+import ContentHeader from "@/components/ContentHeader";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import { useGetApplicationsQuery, useGetAuthUserQuery } from "@/state/api";
 import { CircleCheckBig, Clock, Download, XCircle } from "lucide-react";
 import React from "react";
@@ -18,18 +18,18 @@ const TenantApplications = () => {
     accountRole: "tenant",
   });
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <LoadingSpinner />;
   if (isError || !tenantApplications) return <div>Error fetching applications</div>;
 
   return (
     <div className="dashboard-container">
-      <Header
+      <ContentHeader
         title="Applications"
         subtitle="Track and manage your property rental applications"
       />
       <div className="w-full">
         {tenantApplications?.map((application) => (
-          <ApplicationCard
+          <PropertyApplicationCard
             key={application.id}
             application={application}
             userType="renter"
@@ -61,7 +61,7 @@ const TenantApplications = () => {
                 Download Agreement
               </button>
             </div>
-          </ApplicationCard>
+          </PropertyApplicationCard>
         ))}
       </div>
     </div>

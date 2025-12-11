@@ -2,7 +2,7 @@ import { Mail, MapPin, PhoneCall } from "lucide-react";
 import Image from "next/image";
 import React, { useState } from "react";
 
-const ApplicationCard = ({
+const PropertyApplicationCard = ({
   application,
   userType,
   children,
@@ -124,4 +124,4 @@ const ApplicationCard = ({
   );
 };
 
-export default ApplicationCard;
+export default PropertyApplicationCard;

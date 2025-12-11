@@ -1,6 +1,6 @@
 "use client";
 
-import SettingsForm from "@/components/SettingsForm";
+import SettingsForm from "@/components/UserSettingsForm";
 import {
   useGetAuthUserQuery,
   useUpdateManagerSettingsMutation,
@@ -28,8 +28,8 @@ const ManagerSettingsPage = () => {
 
   return (
     <SettingsForm
-      initialManagerSettings={userSettingsInitialValues}
-      submitManagerSettingsForm={submitManagerSettings}
+      defaultSettings={userSettingsInitialValues}
+      onSaveManagerSettings={submitManagerSettings}
       roleType="manager"
     />
   );

@@ -1,11 +1,9 @@
 'use client';
 
-// 1. React + Next.js framework utilities
 import React from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
-// 2. Internal UI components (sidebar layout and interaction)
 import {
   Sidebar,
   SidebarContent,
@@ -16,7 +14,6 @@ import {
   useSidebar,
 } from './ui/sidebar';
 
-// 3. Icons used for navigation items
 import {
   Building,
   FileText,
@@ -27,12 +24,11 @@ import {
   X,
 } from 'lucide-react';
 
-// 4. Project constants + shared helpers
 import { NAVBAR_HEIGHT } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 
 // Sidebar component: Displays role-based navigation for manager or tenant views.
-const AppSidebar = ({ userType }: AppSidebarProps) => {
+const RoleSidebar = ({ userType }: AppSidebarProps) => {
   const pathname = usePathname();
   const { toggleSidebar, open } = useSidebar();
 
@@ -145,5 +141,5 @@ const AppSidebar = ({ userType }: AppSidebarProps) => {
   );
 };
 
-export default AppSidebar;
+export default RoleSidebar;
  
