@@ -29,5 +29,5 @@ export default function HomePage() {
   }, [authStatus, router]);
 
   // optional: loading screen to avoid flicker
-  return <p>Loading...</p>;
+  return <p>Loading... uwu</p>;
 }
