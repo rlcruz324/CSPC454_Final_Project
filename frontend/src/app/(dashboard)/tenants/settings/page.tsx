@@ -28,9 +28,9 @@ const TenantSettings = () => {
 
   return (
     <SettingsForm
-      initialData={initialData}
-      onSubmit={handleSubmit}
-      userType="tenant"
+      initialManagerSettings={initialData}
+      submitManagerSettingsForm={handleSubmit}
+      roleType="tenant"
     />
   );
 };

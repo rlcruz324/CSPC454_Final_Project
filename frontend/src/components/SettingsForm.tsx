@@ -17,9 +17,9 @@ import { CustomFormField } from "./FormField";
 
 
 const SettingsForm = ({
-  initialData,
-  onSubmit,
-  userType,
+  initialManagerSettings: initialData,
+  submitManagerSettingsForm: onSubmit,
+  roleType: userType,
 }: SettingsFormProps) => {
   // Tracks whether inputs are editable or locked for display only
   const [editMode, setEditMode] = useState(false);

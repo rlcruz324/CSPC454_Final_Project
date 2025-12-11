@@ -28,9 +28,9 @@ const ManagerSettingsPage = () => {
 
   return (
     <SettingsForm
-      initialData={userSettingsInitialValues}
-      onSubmit={submitManagerSettings}
-      userType="manager"
+      initialManagerSettings={userSettingsInitialValues}
+      submitManagerSettingsForm={submitManagerSettings}
+      roleType="manager"
     />
   );
 };

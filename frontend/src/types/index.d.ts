@@ -125,9 +125,9 @@ declare global {
   }
 
   interface SettingsFormProps {
-    initialData: SettingsFormData;
-    onSubmit: (data: SettingsFormData) => Promise<void>;
-    userType: "manager" | "tenant";
+    initialManagerSettings: SettingsFormData;
+    submitManagerSettingsForm: (data: SettingsFormData) => Promise<void>;
+    roleType: "manager" | "tenant";
   }
 
   interface User {
