@@ -13,16 +13,16 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 //Controller getLeases start
-export const getLeases = async (req: Request, res: Response): Promise<void> => {
+export const listLeases = async (req: Request, res: Response): Promise<void> => {
   try {
-    const leases = await prisma.lease.findMany({
+    const fetchedLeases = await prisma.lease.findMany({
       include: {
         tenant: true,
         property: true,
       },
     });
 
-    res.json(leases);
+    res.json(fetchedLeases);
   } catch (error: any) {
     res
       .status(500)
@@ -35,18 +35,18 @@ export const getLeases = async (req: Request, res: Response): Promise<void> => {
 //Useful for showing detailed payment history in UI.
 
 //Controller getLeasePayments
-export const getLeasePayments = async (
+export const listLeasePayments = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
     const { id } = req.params;
 
-    const payments = await prisma.payment.findMany({
+    const fetchedPayments = await prisma.payment.findMany({
       where: { leaseId: Number(id) },
     });
 
-    res.json(payments);
+    res.json(fetchedPayments);
   } catch (error: any) {
     res
       .status(500)
