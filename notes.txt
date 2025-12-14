@@ -755,12 +755,10 @@ for now just focus on meeting the minimum requirements for the project
 it might be bacause this user is not in the training data and needs to be added somehow
 tried to run npm run seed but it hangs
 could be an issue with a security group
-god i want to cry so bad but this isnt my only project and if i cry it stalls the whole process
 do i really need to figure this out to get at least a C in this?
 idk
 seeding works now but it did not solve the problem so back to square 1
 i tried everythingits been 12 hours im sick of this
-i jus twant to sleep so bad its been 3 days but i dont have time
 i dont think the congnito users are being added to the database...but why not?
 
 Im just going to start over maybe I was rushing the aws setup or something idk
@@ -806,12 +804,10 @@ i had to reconnect to the ec2 instance
 so it is something i need to redo or something
 a step i need to redo
 could be i didnt do something
-I was so close to the end i could have slept today
 cant connect to the instance again
 gonna reboot
 this is such a bummer
 will this even work when i present
-i just want to sleep pleeeease
 okay its working again
 the issue comes from ec2 if i skip commands 
 
@@ -830,8 +826,6 @@ seems like everything is running smoothly
 
 Somehow i broke it even worse than before and i feel so defeated 
 i think if i ever get it back up an running again that i will just leave it alone 
-i gotta get ready to go to class. i hate how i lose 8 hours of my day to travel and class 
-i really need that time to work on the project ...
 ec2 is being completely unresponsive for an hour
 
 
@@ -886,8 +880,5 @@ Issue: shadcn button is too dark to read
 | Context provider | PascalCase      | `AuthProvider` |
 
 
-Standard Tailwind order:
-layout → size → spacing
-className='mx-auto max-w-4xl px-16 sm:px-12'
 
 
