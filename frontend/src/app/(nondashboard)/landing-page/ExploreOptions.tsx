@@ -1,21 +1,17 @@
 "use client"
 
-// 1. React (always at top)
 import React from 'react'
 
-// 2. Next.js framework imports
 import Image from 'next/image'
 import Link from 'next/link'
 
-// 3. Third-party libraries
 import { motion } from 'framer-motion'
 
-// 4. Internal UI components (none used here)
 
 
 
-// Motion variants for staggered fade-in animation.
-// Container controls timing and sequencing of children.
+//motion variants for staggered fade-in animation
+//container controls timing and sequencing of children
 const containerVariants = {
   hidden: { opacity: 0, y: 50 },
   visible: {
@@ -28,8 +24,8 @@ const containerVariants = {
   }
 }
 
-// Each item fades in individually.
-// Used for cards + heading.
+//each item fades in individually
+//used for cards + heading
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0 },
@@ -37,9 +33,9 @@ const itemVariants = {
 
 
 
-// Main Explore Options section.
-// Includes a headline and three feature cards.
-// Animates into view using Framer Motion.
+//main Explore Options section
+//includes a headline and three feature cards
+//animates into view using Framer Motion
 const ExploreOptions = () => {
   return (
 
@@ -53,14 +49,14 @@ const ExploreOptions = () => {
 
       {/* 
         INNER WRAPPER
-        - Controls max width for the content.
-        - Centers everything horizontally.
+        - controls max width for the content
+        - centers everything horizontally
       */}
       <div className="mx-auto max-w-4xl xl:max-w-6xl">
 
         {/* SECTION TITLE
-          - Animated heading above the cards.
-          - Centered for clear visual hierarchy.
+          - animated heading above the cards
+          - centered for clear visual hierarchy
         */}
         <motion.h2
           variants={itemVariants}
@@ -72,15 +68,15 @@ const ExploreOptions = () => {
 
         {/* 
           CARD GRID
-          - Switches from 1 column → 3 columns at md breakpoint.
-          - Uses gap utilities for responsive spacing.
+          -switches from 1 column 3 columns at md breakpoint
+          -uses gap utilities for responsive spacing.
         */}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3 lg:gap-12 xl:gap-16">
 
           {/* 
             CARD LOOP
-            - Renders three feature cards.
-            - Uses index to select title, description, and image.
+            -renders three feature cards.
+            - uses index to select title, description, and image.
           */}
           {[0, 1, 2].map((index) => (
             <motion.div key={index} variants={itemVariants}>
@@ -110,8 +106,8 @@ const ExploreOptions = () => {
 
 
 
-// Card component used in the ExploreOptions grid.
-// Displays an image, title, description, and CTA button.
+//card component used in the ExploreOptions grid
+//displays an image, title, description, and CTA button
 const FeatureCard = ({
   imageSrc,
   title,
@@ -128,13 +124,13 @@ const FeatureCard = ({
   return (
 
     // WRAPPER
-    // Centers card content and controls spacing.
+    // Centers card content and controls spacing
     <div className="text-center">
 
       {/* 
         IMAGE BLOCK
-        - Contains the feature illustration.
-        - Uses object-contain to avoid cropping.
+        -contains the feature illustration
+        -uses object-contain to avoid cropping
       */}
       <div className="mb-4 flex h-48 items-center justify-center rounded-lg p-4">
         <Image

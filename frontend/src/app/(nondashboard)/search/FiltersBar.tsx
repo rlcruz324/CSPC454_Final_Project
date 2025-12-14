@@ -1,16 +1,14 @@
 //Renders and manages the full filter bar and view mode controls for the listings page.
 //This component provides all quick-access filters used on the listings page, including location search, price range selection, bedroom and bathroom counts, and property type selection. It updates global filter state, syncs filters with the URL, performs debounced updates for performance, and integrates view mode switching. Existing inline section comments (from professor) are preserved and expanded for clarity and purpose-driven context.
 
-//React and framework imports
 import React, { useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
-//Third-party libraries
 import { useDispatch } from 'react-redux';
 import { debounce } from 'lodash';
 import { Filter, Grid, List, Search } from 'lucide-react';
 
-//Project modules (lib, utils, state, constants)
+//project modules (lib, utils, state, constants)
 import {
   FiltersState,
   setFilters,
@@ -34,21 +32,21 @@ import {
 
 
 const FiltersBar = () => {
-  //Retrieves dispatcher and routing helpers for global state updates and URL navigation
+  //retrieves dispatcher and routing helpers for global state updates and URL navigation
   const dispatch = useDispatch();
   const router = useRouter();
   const pathname = usePathname();
 
-  //Selects global filter state, view mode, and filter panel visibility
+  //selects global filter state, view mode, and filter panel visibility
   const filters = useAppSelector((state) => state.global.filters);
   const isFiltersFullOpen = useAppSelector((state) => state.global.isFiltersFullOpen);
   const viewMode = useAppSelector((state) => state.global.viewMode);
 
-  //Local controlled state for the location search input
+  //local controlled state for the location search input
   const [searchInput, setSearchInput] = useState(filters.location);
 
-  //Updates the URL query string whenever filters change
-  //Debounced to prevent excessive navigation updates during rapid interactions
+  //updates the URL query string whenever filters change
+  //debounced to prevent excessive navigation updates during rapid interactions
   const updateURL = debounce((newFilters: FiltersState) => {
     const cleanFilters = cleanParams(newFilters);
     const updatedSearchParams = new URLSearchParams();
@@ -60,8 +58,8 @@ const FiltersBar = () => {
     router.push(`${pathname}?${updatedSearchParams.toString()}`);
   });
 
-  //Handles updates to individual filter values
-  //Includes normalization logic for range filters and 'any' values
+  //handles updates to individual filter values
+  //includes normalization logic for range filters and 'any' values
   const handleFilterChange = (key: string, value: any, isMin: boolean | null) => {
     let newValue = value;
 
@@ -83,8 +81,8 @@ const FiltersBar = () => {
     updateURL(newFilters);
   };
 
-  //Executes a Mapbox geocoding request to convert text input into coordinates
-  //Updates global state with both the resolved location string and coordinates
+  //executes a Mapbox geocoding request to convert text input into coordinates
+  //updates global state with both the resolved location string and coordinates
   const handleLocationSearch = async () => {
     try {
       const response = await fetch(
@@ -109,11 +107,11 @@ const FiltersBar = () => {
 
   return (
     <div className='flex justify-between items-center w-full py-5'>
-      {/* Filters */}
-      {/* This left section contains all user-facing quick filters such as location, price, beds/baths, and property type. */}
+      {/* filters */}
+      {/* this left section contains all user-facing quick filters such as location, price, beds/baths, and property type. */}
       <div className='flex justify-between items-center gap-4 p-2'>
-        {/* All Filters */}
-        {/* Opens the full filter panel for access to additional filtering options not shown on the quick bar. */}
+        {/* all filters */}
+        {/* opens the full filter panel for access to additional filtering options not shown on the quick bar. */}
        <Button
           variant="outline"
           className={cn(
@@ -127,8 +125,8 @@ const FiltersBar = () => {
         </Button>
 
 
-        {/* Search Location */}
-        {/* Handles text-based location input and triggers map-based geocoding when searching. */}
+        {/* search Location */}
+        {/* handles text-based location input and triggers map-based geocoding when searching. */}
         <div className='flex items-center'>
           <Input
             placeholder='Search location'
@@ -145,10 +143,10 @@ const FiltersBar = () => {
 
         </div>
 
-        {/* Price Range */}
+        {/* price range */}
         {/* Two-part selector for min and max price values. Normalized and stored as numeric range array. */}
         <div className='flex gap-1'>
-          {/* Minimum Price Selector */}
+          {/* minimum Price Selector */}
           <Select
             value={filters.priceRange[0]?.toString() || 'any'}
             onValueChange={(value) => handleFilterChange('priceRange', value, true)}
@@ -166,7 +164,7 @@ const FiltersBar = () => {
             </SelectContent>
           </Select>
 
-          {/* Maximum Price Selector */}
+          {/* maximum Price Selector */}
           <Select
             value={filters.priceRange[1]?.toString() || 'any'}
             onValueChange={(value) => handleFilterChange('priceRange', value, false)}
@@ -185,10 +183,10 @@ const FiltersBar = () => {
           </Select>
         </div>
 
-        {/* Beds and Baths */}
-        {/* Basic bedroom/bathroom count filters used heavily for narrowing down rental searches. */}
+        {/* beds and baths */}
+        {/* basic bedroom/bathroom count filters used heavily for narrowing down rental searches. */}
         <div className='flex gap-1'>
-          {/* Beds */}
+          {/* beds */}
           <Select
             value={filters.beds}
             onValueChange={(value) => handleFilterChange('beds', value, null)}
@@ -205,7 +203,7 @@ const FiltersBar = () => {
             </SelectContent>
           </Select>
 
-          {/* Baths */}
+          {/* baths */}
           <Select
             value={filters.baths}
             onValueChange={(value) => handleFilterChange('baths', value, null)}
@@ -222,8 +220,8 @@ const FiltersBar = () => {
           </Select>
         </div>
 
-        {/* Property Type */}
-        {/* Dropdown populated dynamically using icons from the constants file. */}
+        {/* property Type */}
+        {/* dropdown populated dynamically using icons from the constants file. */}
         <Select
           value={filters.propertyType || 'any'}
           onValueChange={(value) => handleFilterChange('propertyType', value, null)}
@@ -245,8 +243,8 @@ const FiltersBar = () => {
         </Select>
       </div>
 
-      {/* View Mode */}
-      {/* Toggles between list and grid visual layouts for listings. Stores preference globally. */}
+      {/* view Mode */}
+      {/* toggles between list and grid visual layouts for listings. Stores preference globally. */}
       <div className='flex justify-between items-center gap-4 p-2'>
         <div className='flex border rounded-xl'>
           <Button

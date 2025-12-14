@@ -1,20 +1,16 @@
 "use client"
 
-// 1. React (always at top)
 import React from 'react'
 
-// 2. Next.js framework imports
 import Image from 'next/image'
 
-// 3. Third-party libraries
 import { motion } from 'framer-motion'
 
-// 4. Internal UI components (none used here)
 
 
 
-// Motion variants for staggered fade-in animation.
-// Container controls timing and sequencing of child elements.
+//motion variants for staggered fade-in animation
+//container controls timing and sequencing of child elements
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -26,8 +22,8 @@ const containerVariants = {
   }
 }
 
-// Each item fades upward into place.
-// Applied to the section title and each card.
+//each item fades upward into place
+//applied to the section title and each card
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0 },
@@ -35,8 +31,8 @@ const itemVariants = {
 
 
 
-// Main highlights section.
-// Introduces key platform features with animated cards.
+//main highlights section.
+//introduces key platform features with animated cards
 const PlatformHighlights = () => {
   return (
 
@@ -49,14 +45,14 @@ const PlatformHighlights = () => {
     >
 
       {/* INNER WRAPPER
-        - Centers content and manages responsive padding.
-        - Expands to larger max width on big screens.
+        -centers content and manages responsive padding
+        -expands to larger max width on big screens
       */}
       <div className="mx-auto max-w-6xl px-6 sm:px-8 lg:px-12 xl:max-w-7xl xl:px-16">
 
         {/* SECTION HEADER
-          - Title + supporting paragraph.
-          - Animated together using itemVariants.
+          -title + supporting paragraph
+          -animated together using itemVariants
         */}
         <motion.div
           variants={itemVariants}
@@ -74,14 +70,14 @@ const PlatformHighlights = () => {
         </motion.div>
 
         {/* CARD GRID
-          - 1 column on mobile, 3 columns on medium screens.
-          - Large gaps on wider layouts for clean spacing.
+          -1 column on mobile, 3 columns on medium screens
+          -large gaps on wider layouts for clean spacing
         */}
         <div className="grid grid-cols-1 gap-8 text-center md:grid-cols-3 lg:gap-12 xl:gap-16">
 
           {/* CARD LOOP
-            - Generates three DiscoverCard elements.
-            - Each wrapped in a motion.div for staggered animation.
+            - generates three DiscoverCard elements
+            - each wrapped in a motion.div for staggered animation
           */}
           {[
             {
@@ -116,8 +112,8 @@ const PlatformHighlights = () => {
 
 
 
-// Individual highlight card.
-// Displays an icon, title, and short description.
+// individual highlight card
+// displays an icon, title, and short description
 const DiscoverCard = ({
   imageSrc,
   title,
@@ -130,12 +126,12 @@ const DiscoverCard = ({
   return (
 
     // CARD WRAPPER
-    // Includes shadow, rounded corners, and consistent padding.
+    // includes shadow, rounded corners, and consistent padding
     <div className="rounded-lg bg-primary-50 px-4 py-12 shadow-lg md:h-72">
 
       {/* ICON WRAPPER
-        - Small circle with brand color background.
-        - Centers the icon visually within the card.
+        -small circle with brand color background
+        -centers the icon visually within the card
       */}
       <div className="mx-auto mb-4 h-10 w-10 rounded-full bg-primary-700 p-[0.6rem]">
         <Image

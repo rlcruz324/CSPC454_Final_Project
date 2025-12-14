@@ -1,29 +1,24 @@
 "use client"
 
-// 1. React (always at top)
 import React from 'react'
-
-// 2. Next.js framework imports
 import Image from 'next/image'
 import Link from 'next/link'
 
-// 3. Third-party libraries
 import { motion } from 'framer-motion'
 
-// 4. Internal UI components (none used here)
 
 const ActionSection = () => {
   return (
-    // OUTER WRAPPER
-    // Controls spacing around the entire CTA block.
-    // `relative` required for background image layering.
+    //OUTER WRAPPER
+    //controls spacing around the entire CTA block
+    //`relative required for background image layering
     <div className="relative py-24">
 
       {/* 
         BACKGROUND IMAGE
-        - Covers entire section using `fill`.
-        - Image sits behind content due to wrapper `relative`.
-        - Replace src if a new theme or mood is needed.
+        -covers entire section using `fill`
+        -image sits behind content due to wrapper `relative`
+        - replace src if a new theme or mood is needed
       */}
       <Image
         src="/blue-night-sky-filled-with-star.jpg"
@@ -34,15 +29,15 @@ const ActionSection = () => {
 
       {/*
         DARK OVERLAY
-        - Adds contrast to the text placed over the image.
-        - Opacity and color adjustable via Tailwind classes.
+        -adds contrast to the text placed over the image
+        -opacity and color adjustable via Tailwind classes
       */}
       <div className="absolute inset-0 bg-secondary-800 bg-opacity-70"></div>
 
       {/*
         MOTION WRAPPER
-        - Handles fade-in and upward animation.
-        - Triggers only once when the section scrolls into view.
+        -handles fade-in and upward animation.
+        -triggers only once when the section scrolls into view.
       */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}     // starting animation state
@@ -54,8 +49,8 @@ const ActionSection = () => {
 
         {/* 
           CONTENT COLUMN
-          - Stacks headline, subtext, and buttons vertically.
-          - `space-y-1` keeps spacing consistent and minimal.
+          -stacks headline, subtext, and buttons vertically.
+          -`space-y-1` keeps spacing consistent and minimal.
         */}
         <div className="flex flex-col items-center justify-between space-y-1">
 
@@ -76,8 +71,8 @@ const ActionSection = () => {
             <div className="mt-6 flex items-center justify-center gap-4">
 
               {/* SEARCH BUTTON
-                - Scrolls user back to the top of the page smoothly.
-                - Uses primary color styling for emphasis.
+                -scrolls user back to the top of the page smoothly.
+                -uses primary color styling for emphasis.
               */}
               <button
                 onClick={() =>
@@ -89,8 +84,8 @@ const ActionSection = () => {
               </button>
 
               {/* SIGN UP BUTTON
-                - Next.js Link for client-side navigation.
-                - Styled with secondary color palette.
+                -Next.js Link for client-side navigation.
+                -styled with secondary color palette.
               */}
               <Link
                 href="/signup"

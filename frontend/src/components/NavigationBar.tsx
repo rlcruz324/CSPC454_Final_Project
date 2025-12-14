@@ -12,23 +12,23 @@ import { SidebarTrigger } from "./ui/sidebar";
 import { useGetAuthUserQuery } from "@/state/api";
 import { signOut } from "aws-amplify/auth";
 
-//Icons (used for dashboard actions)
+//ucons (used for dashboard actions)
 import { Bell, MessageCircle, Plus, Search } from "lucide-react";
 
-//Navigation Bar component: Renders the site header, including branding, authentication controls, and dashboard utilities.
+//navigation Bar component: Renders the site header, including branding, authentication controls, and dashboard utilities.
 const NavigationBar = () => {
-  //Authenticated user info from global API state
+  //authenticated user info from global API state
   const { data: authenticatedUser } = useGetAuthUserQuery();
 
-  //Routing helpers
+  //routing helpers
   const router = useRouter();
   const pathname = usePathname();
 
-  //Dashboard detection logic for conditional UI (e.g., managers or tenants areas)
+  //dashboard detection logic for conditional UI (e.g., managers or tenants areas)
   const isDashboardPage =
     pathname.includes("/managers") || pathname.includes("/tenants");
 
-  //Sign-out handler: Calls AWS Amplify sign out and returns user to the home page
+  //sign-out handler: Calls AWS Amplify sign out and returns user to the home page
   const signOutUser = async () => {
     await signOut();
     window.location.href = "/";
@@ -37,7 +37,7 @@ const NavigationBar = () => {
   return (
     <div
       className="fixed top-0 left-0 z-50 w-full shadow-xl"
-      //Inline height ensures the header stays tied to the design constant
+      //inline height ensures the header stays tied to the design constant
       style={{ height: `${NAVBAR_HEIGHT}px` }}
     >
       <div className="flex w-full items-center justify-between bg-background-600 px-8 py-3 text-white">
@@ -50,7 +50,7 @@ const NavigationBar = () => {
             </div>
           )}
 
-          {/* Logo + brand identity */}
+          {/* logo + brand identity */}
           <Link
             href="/"
             scroll={false}
@@ -73,7 +73,7 @@ const NavigationBar = () => {
             </div>
           </Link>
 
-          {/* Dashboard action button: New Property for managers OR Search for tenants */}
+          {/* dashboard action button: New Property for managers OR Search for tenants */}
           {isDashboardPage && authenticatedUser && (
             <Button
               variant="secondary"
@@ -103,18 +103,18 @@ const NavigationBar = () => {
           )}
         </div>
 
-        {/* Tagline shown only on non-dashboard pages */}
+        {/* tagline shown only on non-dashboard pages */}
         {!isDashboardPage && (
           <p className="hidden text-primary-200 md:block">
             Your lucky rental platform :D
           </p>
         )}
 
-        {/* Authentication + user controls (right side) */}
+        {/* authentication + user controls (right side) */}
         <div className="flex items-center gap-5">
           {authenticatedUser ? (
             <>
-              {/* Notification icons: Shown only on medium screens and above */}
+              {/* notification icons: Shown only on medium screens and above */}
               <div className="relative hidden md:block">
                 <MessageCircle className="w-6 h-6 cursor-pointer text-primary-200 hover:text-primary-400" />
                 <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-secondary-700"></span>
@@ -125,7 +125,7 @@ const NavigationBar = () => {
                 <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-secondary-700"></span>
               </div>
 
-              {/* User avatar + dropdown menu */}
+              {/* user avatar + dropdown menu */}
               <DropdownMenu>
                 <DropdownMenuTrigger className="flex items-center gap-2 focus:outline-none">
                   <Avatar>
@@ -140,7 +140,7 @@ const NavigationBar = () => {
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent className="bg-white text-primary-700">
-                  {/* Dashboard redirect */}
+                  {/* dashboard redirect */}
                   <DropdownMenuItem
                     className="cursor-pointer font-bold hover:!bg-primary-700 hover:!text-primary-100"
                     onClick={() =>
@@ -157,7 +157,7 @@ const NavigationBar = () => {
 
                   <DropdownMenuSeparator className="bg-primary-200" />
 
-                  {/* Settings page */}
+                  {/* settings page */}
                   <DropdownMenuItem
                     className="cursor-pointer hover:!bg-primary-700 hover:!text-primary-100"
                     onClick={() =>
@@ -170,7 +170,7 @@ const NavigationBar = () => {
                     Settings
                   </DropdownMenuItem>
 
-                  {/* Log out */}
+                  {/* log out */}
                   <DropdownMenuItem
                     className="cursor-pointer hover:!bg-primary-700 hover:!text-primary-100"
                     onClick={signOutUser}
@@ -181,7 +181,7 @@ const NavigationBar = () => {
               </DropdownMenu>
             </>
           ) : (
-            //Unauthenticated state: Sign In /Sign Up buttons
+            //unauthenticated state: Sign In /Sign Up buttons
             <>
               <Link href="/signin">
                 <Button
@@ -214,84 +214,4 @@ export default NavigationBar;
 
 
 
-//"use client"
 
-////1. React core
-//import React from "react";
-
-////2. Next.js framework imports
-//import Image from "next/image";
-//import Link from "next/link";
-
-////3. Project constants
-//import { NAVBAR_HEIGHT } from "@/lib/constants";
-
-////4. Internal UI components (design system /shared components)
-//import { Button } from "./ui/button";
-
-////Navigation Bar component: Renders a fixed header with branding and auth links.
-//const NavigationBar = () => {
-//  return (
-//    <div
-//      className="fixed top-0 left-0 z-50 w-full shadow-xl"
-//      //Inline height is intentional so it remains tied to the constant value
-//      style={{ height: `${NAVBAR_HEIGHT}px` }}
-//    >
-//      <div className="flex w-full items-center justify-between bg-background-600 px-8 py-3 text-white">
-//        {/* Logo + brand section: Can be replaced with a dynamic logo or tenant-specific branding */}
-//        <div className="flex items-center gap-4 md:gap-6">
-//          <Link
-//            href="/"
-//            scroll={false}
-//            //Hover style override ensures brand text matches site theme
-//            className="cursor-pointer hover:!text-primary-300"
-//          >
-//            <div className="flex items-center gap-3">
-//              <Image
-//                src="/stars.svg"
-//                alt="Rentiful Logo"
-//                width={30}
-//                height={30}
-//                className="h-15 w-15"
-//              />
-//              <div className="text-xl font-bold text-secondary-500">
-//                Lucky
-//                <span className="text-tertiary-400 text-xl font-bold hover:!text-primary-300">
-//                  ⭐Star
-//                </span>
-//              </div>
-//            </div>
-//          </Link>
-//        </div>
-
-//        {/* Optional tagline: Can be swapped or removed depending on product branding */}
-//        <p className="hidden text-primary-200 md:block">
-//          Your lucky rental platform :D
-//        </p>
-
-//        {/* Authentication actions: Button variants customizable via design system */}
-//        <div className="flex items-center gap-5">
-//          <Link href="/signin">
-//            <Button
-//              variant="outline"
-//              className="rounded-lg border-white bg-transparent text-white hover:bg-white hover:text-primary-700"
-//            >
-//              Sign In
-//            </Button>
-//          </Link>
-
-//          <Link href="/signup">
-//            <Button
-//              variant="secondary"
-//              className="rounded-lg bg-secondary-600 text-white hover:bg-white hover:text-primary-700"
-//            >
-//              Sign Up
-//            </Button>
-//          </Link>
-//        </div>
-//      </div>
-//    </div>
-//  );
-//};
-
-//export default NavigationBar;

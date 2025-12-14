@@ -1,5 +1,7 @@
 "use client";
 
+//manager settings page for viewing and updating profile information
+
 import SettingsForm from "@/components/UserSettingsForm";
 import {
   useGetAuthUserQuery,
@@ -8,18 +10,27 @@ import {
 import React from "react";
 
 const ManagerSettingsPage = () => {
-  const { data: authenticatedUser, isLoading: isFetchingUser } = useGetAuthUserQuery();
+  //fetches authenticated user data for pre-filling the settings form
+  const { data: authenticatedUser, isLoading: isFetchingUser } =
+    useGetAuthUserQuery();
+
+  //mutation for updating manager profile settings
   const [updateManager] = useUpdateManagerSettingsMutation();
 
+  //loading state while user data is being retrieved
   if (isFetchingUser) return <>Loading...</>;
 
+  //initial form values derived from authenticated user info
   const userSettingsInitialValues = {
     name: authenticatedUser?.userInfo.name,
     email: authenticatedUser?.userInfo.email,
     phoneNumber: authenticatedUser?.userInfo.phoneNumber,
   };
 
-  const submitManagerSettings = async (data: typeof userSettingsInitialValues) => {
+  //submits updated manager settings to the backend
+  const submitManagerSettings = async (
+    data: typeof userSettingsInitialValues
+  ) => {
     await updateManager({
       cognitoId: authenticatedUser?.cognitoInfo?.userId,
       ...data,
@@ -27,6 +38,7 @@ const ManagerSettingsPage = () => {
   };
 
   return (
+    //reusable settings form configured for manager role
     <SettingsForm
       defaultSettings={userSettingsInitialValues}
       onSaveManagerSettings={submitManagerSettings}

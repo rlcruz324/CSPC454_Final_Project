@@ -1,13 +1,9 @@
-//1. React core
 import React from "react";
 
-//2. Next.js 
 import Link from "next/link";
 
-// 3. Third-party libraries
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-// 4. FontAwesome icons
 import {
   faFacebook,
   faInstagram,
@@ -17,23 +13,23 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 
 
-// Footer component displayed across the site
+//footer component displayed across the site
 const SiteFooter = () => {
   return (
-    // Footer wrapper with border separation and vertical padding
+    //footer wrapper with border separation and vertical padding
     <footer className="border-t border-gray-200 py-10">
       <div className="mx-auto max-w-4xl px-6 sm:px-8">
-        {/* Top section with logo, navigation, and social icons */}
+        {/* top section with logo, navigation, and social icons */}
         <div className="flex flex-col items-center justify-between md:flex-row">
           
-          {/* Logo section */}
+          {/* logo section */}
           <div className="mb-4">
             <Link href="/" className="text-xl font-bold" scroll={false}>
               Lucky⭐Star
             </Link>
           </div>
 
-          {/* Navigation links */}
+          {/* navigation links */}
           <nav className="mb-4">
             <ul className="flex space-x-6">
               <li>
@@ -54,7 +50,7 @@ const SiteFooter = () => {
             </ul>
           </nav>
 
-          {/* Social media icons */}
+          {/* social media icons */}
           <div className="mb-4 flex space-x-4">
             <a
               href="#"
@@ -98,7 +94,7 @@ const SiteFooter = () => {
           </div>
         </div>
 
-        {/* Bottom legal + extra links */}
+        {/* bottom legal + extra links */}
         <div className="mt-8 flex justify-center space-x-4 text-center text-sm text-gray-500">
           <span>© Lucky⭐Star. All rights reserved.</span>
           <Link href="/privacy">Privacy Policy</Link>

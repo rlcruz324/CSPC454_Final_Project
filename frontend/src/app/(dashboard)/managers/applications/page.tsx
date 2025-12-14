@@ -1,5 +1,7 @@
 "use client";
 
+//manager applications page for viewing and managing tenant applications
+
 import PropertyApplicationCard from "@/components/PropertyApplicationCard";
 import ContentHeader from "@/components/ContentHeader";
 import LoadingSpinner from "@/components/LoadingSpinner";
@@ -14,9 +16,14 @@ import Link from "next/link";
 import React, { useState } from "react";
 
 const ManagerApplicationsPage = () => {
+  //fetches the authenticated user to determine manager identity
   const { data: authUser } = useGetAuthUserQuery();
+
+  //tracks the currently selected application status tab
   const [statusFilter, setStatusFilter] = useState("all");
 
+  //retrieves all applications associated with the manager
+  //query is skipped until the cognito user id is available
   const {
     data: applications,
     isLoading,
@@ -30,15 +37,20 @@ const ManagerApplicationsPage = () => {
       skip: !authUser?.cognitoInfo?.userId,
     }
   );
+
+  //mutation used to approve or deny applications
   const [updateApplicationStatus] = useApplicationStatusUpdateMutation();
 
+  //updates application status and triggers backend persistence
   const updateApplicationStatusHandler = async (id: number, status: string) => {
     await updateApplicationStatus({ id, status });
   };
 
+  //loading and error handling states
   if (isLoading) return <LoadingSpinner />;
   if (isError || !applications) return <div>Error fetching applications</div>;
 
+  //filters applications based on the selected status tab
   const filteredByStatusApplications = applications?.filter((application) => {
     if (statusFilter === "all") return true;
     return application.status.toLowerCase() === statusFilter;
@@ -46,10 +58,13 @@ const ManagerApplicationsPage = () => {
 
   return (
     <div className="dashboard-container">
+      {/* page header describing purpose of the view */}
       <ContentHeader
         title="Applications"
         subtitle="View and manage applications for your properties"
       />
+
+      {/* tab navigation used to filter applications by status */}
       <Tabs
         value={statusFilter}
         onValueChange={setStatusFilter}
@@ -61,6 +76,8 @@ const ManagerApplicationsPage = () => {
           <TabsTrigger value="approved">Approved</TabsTrigger>
           <TabsTrigger value="denied">Denied</TabsTrigger>
         </TabsList>
+
+        {/* renders application lists dynamically for each status tab */}
         {["all", "pending", "approved", "denied"].map((tab) => (
           <TabsContent key={tab} value={tab} className="mt-5 w-full">
             {filteredByStatusApplications
@@ -75,7 +92,8 @@ const ManagerApplicationsPage = () => {
                   userType="manager"
                 >
                   <div className="flex justify-between gap-5 w-full pb-4 px-4">
-                    {/* Colored Section Status */}
+                    
+                    {/* application summary and status indicator */}
                     <div
                       className={`p-4 text-green-700 grow ${
                         application.status === "Approved"
@@ -114,8 +132,9 @@ const ManagerApplicationsPage = () => {
                       </div>
                     </div>
 
-                    {/* Right Buttons */}
+                    {/* action buttons based on application status */}
                     <div className="flex gap-2">
+                      {/* navigates to property details without full page reload */}
                       <Link
                         href={`/managers/properties/${application.property.id}`}
                         className={`bg-white border border-gray-300 text-gray-700 py-2 px-4 
@@ -125,6 +144,8 @@ const ManagerApplicationsPage = () => {
                         <Hospital className="w-5 h-5 mr-2" />
                         Property Details
                       </Link>
+
+                      {/* allows lease agreement download only for approved applications */}
                       {application.status === "Approved" && (
                         <button
                           className={`bg-white border border-gray-300 text-gray-700 py-2 px-4
@@ -134,6 +155,8 @@ const ManagerApplicationsPage = () => {
                           Download Agreement
                         </button>
                       )}
+
+                      {/* approval and denial actions available only while pending */}
                       {application.status === "Pending" && (
                         <>
                           <button
@@ -154,6 +177,8 @@ const ManagerApplicationsPage = () => {
                           </button>
                         </>
                       )}
+
+                      {/* fallback action for denied applications */}
                       {application.status === "Denied" && (
                         <button
                           className={`bg-gray-800 text-white py-2 px-4 rounded-md flex items-center

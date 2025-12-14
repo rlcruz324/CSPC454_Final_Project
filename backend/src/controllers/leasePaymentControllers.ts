@@ -1,18 +1,17 @@
-//Problematic Component always returns errors
+//problematic component always returns errors
 
-//handlers for retrieving leases and lease payments.
+//handlers for retrieving leases and lease payments
 //provides controller functions for fetching all leases with
-//related tenant and property data, and for retrieving payment records for a
-//specific lease. Includes Prisma queries, error handling, and structured JSON
-//responses.
+//related tenant and property data and for retrieving payment records for a
+//specific lease includes prisma queries error handling and structured json
+//responses
 
-//imports
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-//Controller getLeases start
+//controller getleases start
 export const listLeases = async (req: Request, res: Response): Promise<void> => {
   try {
     const fetchedLeases = await prisma.lease.findMany({
@@ -30,11 +29,11 @@ export const listLeases = async (req: Request, res: Response): Promise<void> => 
   }
 };
 
-//Retrieves all payments associated with a specific lease ID.
-//Converts the ID param to a number before querying the database.
-//Useful for showing detailed payment history in UI.
+//retrieves all payments associated with a specific lease id
+//converts the id param to a number before querying the database
+//useful for showing detailed payment history in ui
 
-//Controller getLeasePayments
+//controller getleasepayments
 export const listLeasePayments = async (
   req: Request,
   res: Response

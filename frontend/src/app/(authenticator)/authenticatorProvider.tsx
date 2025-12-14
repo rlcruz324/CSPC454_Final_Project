@@ -1,13 +1,10 @@
 "use client";
 
-//React and Next.js core imports
 import React, { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 
-//AWS Amplify core configuration
 import { Amplify } from "aws-amplify";
 
-//Amplify UI components (UI library imports)
 import {
   Authenticator,
   Heading,
@@ -17,14 +14,13 @@ import {
   View,
 } from "@aws-amplify/ui-react";
 
-//Amplify UI styling (required stylesheet)
 import "@aws-amplify/ui-react/styles.css";
 
-//No local component imports in this file
-//Add project-local imports below if needed
+//no local component imports in this file
+//add project-local imports below if needed
 
 
-//Amplify config values can be changed by updating environment variables
+//amplify config values can be changed by updating environment variables
 Amplify.configure({
   Auth: {
     Cognito: {
@@ -38,8 +34,8 @@ Amplify.configure({
 
 
 
-//Custom UI components for branding and layout
-//Text, colors, and structure in this section can be updated
+//custom UI components for branding and layout
+//text, colors, and structure in this section can be updated
 const customAuthenticatorComponents = {
   Header() {
     return (
@@ -52,7 +48,7 @@ const customAuthenticatorComponents = {
           </span>
         </Heading>
 
-        {/* Welcome text can be edited */}
+        {/* welcome text can be edited */}
         <p className="text-muted-foreground mt-2">
           <span className="font-bold">Hello!</span> Please sign in to continue! 
         </p>
@@ -60,7 +56,7 @@ const customAuthenticatorComponents = {
     );
   },
 
-  //Sign In footer link text and styles can be modified
+  //sign In footer link text and styles can be modified
   SignIn: {
     Footer() {
       const { toSignUp } = useAuthenticator();
@@ -80,17 +76,17 @@ const customAuthenticatorComponents = {
     },
   },
 
-  //Sign Up form fields and role options can be changed
+  //sign Up form fields and role options can be changed
   SignUp: {
     FormFields() {
       const { validationErrors } = useAuthenticator();
 
       return (
         <>
-          {/* Default form fields can be overridden if a custom layout is needed */}
+          {/* default form fields can be overridden if a custom layout is needed */}
           <Authenticator.SignUp.FormFields />
 
-          {/* Custom role selection options can be edited or expanded */}
+          {/* custom role selection options can be edited or expanded */}
           <RadioGroupField
             legend="Role"
             name="custom:role"
@@ -105,7 +101,7 @@ const customAuthenticatorComponents = {
       );
     },
 
-    //Footer link text can be changed
+    //footer link text can be changed
     Footer() {
       const { toSignIn } = useAuthenticator();
       return (
@@ -125,7 +121,7 @@ const customAuthenticatorComponents = {
   },
 };
 
-//Form field labels, placeholders, and order can be modified
+//form field labels, placeholders, and order can be modified
 const authenticationFormFields = {
   signIn: {
     username: {
@@ -168,34 +164,34 @@ const authenticationFormFields = {
   },
 };
 
-// Authentication wrapper that controls routing logic
-// Redirect behavior and protected routes can be adjusted
+//authentication wrapper that controls routing logic
+//redirect behavior and protected routes can be adjusted
 const AuthenticatorWrapper = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuthenticator((context) => [context.user]);
   const routerInstance = useRouter();
   const currentPathname = usePathname();
 
-  // Paths for login or signup can be adjusted
+  //paths for login or signup can be adjusted
   const isAuthPageRoute = currentPathname.match(/^\/(signin|signup)$/);
 
-  // Dashboard paths can be expanded if more roles are added
+  //dashboard paths can be expanded if more roles are added
   const isDashboardPageRoute =
     currentPathname.startsWith("/manager") || currentPathname.startsWith("/tenants");
 
-  // Redirect logged-in users away from auth pages
-  // Redirect destination can be changed
+  //redirect logged-in users away from auth pages
+  //redirect destination can be changed
   useEffect(() => {
     if (user && isAuthPageRoute) {
       routerInstance.push("/");
     }
   }, [user, isAuthPageRoute, routerInstance]);
 
-  // Allow non-auth pages to render normally
+  //allow non-auth pages to render normally
   if (!isAuthPageRoute && !isDashboardPageRoute) {
     return <>{children}</>;
   }
 
-  // Authenticator wrapper — UI and initial state can be modified
+  //authenticator wrapper — UI and initial state can be modified
   return (
     <div className="h-full">
       <Authenticator

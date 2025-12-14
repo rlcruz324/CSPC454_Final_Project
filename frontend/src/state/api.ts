@@ -1,16 +1,16 @@
-//Centralized Redux Toolkit Query API configuration for all backend requests.
-//Defines API endpoints for authentication, properties, tenants, managers, leases, payments, and applications. Handles authorization headers, request lifecycle behavior, tag invalidation, toast messaging, and automatic user creation. Ensures consistent data fetching and caching across the application without modifying core logic.
+//centralized Redux Toolkit Query API configuration for all backend requests.
+//defines API endpoints for authentication, properties, tenants, managers, leases, payments, and applications. Handles authorization headers, request lifecycle behavior, tag invalidation, toast messaging, and automatic user creation. Ensures consistent data fetching and caching across the application without modifying core logic.
 
 
-//Third-party libraries
+//third-party libraries
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { fetchAuthSession, getCurrentUser } from 'aws-amplify/auth'
 
-//Project modules (lib, utils, state, constants)
+//project modules (lib, utils, state, constants)
 import { cleanParams, createNewUserInDatabase, withToast } from '@/lib/utils'
 import { FiltersState } from '.'
 
-//Types
+//types
 import {
   Application,
   Lease,
@@ -23,7 +23,7 @@ import {
 export const api = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
-    //Configure headers to include JWT extracted from Cognito session
+    //configure headers to include JWT extracted from Cognito session
     prepareHeaders: async (headers) => {
       const session = await fetchAuthSession()
       const { idToken } = session.tokens ?? {}
@@ -42,9 +42,9 @@ export const api = createApi({
     'Applications'
   ],
 
-  //Endpoint definitions for all domain areas
+  //endpoint definitions for all domain areas
   endpoints: (build) => ({
-    //Fetch authenticated user and create one if missing in database
+    //fetch authenticated user and create one if missing in database
     getAuthUser: build.query<User, void>({
       queryFn: async (_, _queryApi, _extraoptions, fetchWithBQ) => {
         try {
@@ -60,7 +60,7 @@ export const api = createApi({
 
           let userDetailsResponse = await fetchWithBQ(endpoint)
 
-          // Create new user if entry does not exist server-side
+          // create new user if entry does not exist server-side
           if (
             userDetailsResponse.error &&
             userDetailsResponse.error.status === 404
@@ -86,7 +86,7 @@ export const api = createApi({
       }
     }),
 
-    //Property list endpoint with filter support
+    //property list endpoint with filter support
     getProperties: build.query<
       Property[],
       Partial<FiltersState> & { favoriteIds?: number[] }
@@ -124,7 +124,7 @@ export const api = createApi({
       }
     }),
 
-    // Fetch single property detail
+    // fetch single property detail
     getProperty: build.query<Property, number>({
       query: (id) => `properties/${id}`,
       providesTags: (_, __, id) => [{ type: 'PropertyDetails', id }],
@@ -135,7 +135,7 @@ export const api = createApi({
       }
     }),
 
-    //Tenant endpoints
+    //tenant endpoints
     getTenant: build.query<Tenant, string>({
       query: (cognitoId) => `tenants/${cognitoId}`,
       providesTags: (result) => [{ type: 'Tenants', id: result?.id }],
@@ -273,7 +273,7 @@ export const api = createApi({
       }
     }),
 
-    // Lease endpoints
+    //lease endpoints
     getLeases: build.query<Lease[], number>({
       query: () => 'leases',
       providesTags: ['Leases'],
@@ -304,7 +304,7 @@ export const api = createApi({
       }
     }),
 
-    // Application endpoints
+    //application endpoints
     getApplications: build.query<
       Application[],
       { tenantUserId?: string; accountRole?: string }

@@ -1,15 +1,14 @@
-//Handlers for application CRUD operations and related lease logic.
-//Manages listing, creating, and updating rental applications.
-//Includes conditional filtering for user roles, formatting property data, lease
+//handlers for application CRUD operations and related lease logic
+//manages listing, creating, and updating rental applications
+//includes conditional filtering for user roles, formatting property data, lease
 //creation within transactions, payment date computation, and status-driven logic
-//for approvals, denials, and tenant-property associations.
-
+//for approvals, denials, and tenant-property associations
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-//Lists applications based on optional tenant or manager context.
-//When userId and userType are present, results are filtered accordingly.
+//lists applications based on optional tenant or manager context
+//when userId and userType are present, results are filtered accordingly
 export const getApplications = async (
   req: Request,
   res: Response
@@ -17,7 +16,7 @@ export const getApplications = async (
   try {
     const { userId, userType } = req.query;
 
-    // Dynamic filtering based on user identity and role.
+    // Dynamic filtering based on user identity and role
     let filterCriteria: any = {};
     if (userId && userType) {
       if (userType === 'tenant') {
@@ -31,7 +30,7 @@ export const getApplications = async (
       }
     }
 
-    //Fetch applications with related property, tenant, and location data.
+    //fetch applications with related property, tenant, and location data
     const applicationsData = await prisma.application.findMany({
       where: filterCriteria,
       include: {
@@ -45,7 +44,7 @@ export const getApplications = async (
       },
     });
 
-    //Calculates the next payment date based on the lease start date.
+    //calculates the next payment date based on the lease start date
     function computeNextPaymentDate(startDate: Date): Date {
       const today = new Date();
       const nextPaymentDate = new Date(startDate);
@@ -55,7 +54,7 @@ export const getApplications = async (
       return nextPaymentDate;
     }
 
-    //Enhances each application with formatted address and lease details.
+    //enhances each application with formatted address and lease details
     const formattedApplications = await Promise.all(
       applicationsData.map(async (app) => {
         const lease = await prisma.lease.findFirst({
@@ -91,8 +90,8 @@ export const getApplications = async (
   }
 };
 
-//Creates a new application along with an associated lease inside a transaction.
-//Ensures consistent linking of tenant, property, and lease data.
+//creates a new application along with an associated lease inside a transaction
+//ensures consistent linking of tenant, property, and lease data
 export const addApplication = async (
   req: Request,
   res: Response
@@ -109,7 +108,7 @@ export const addApplication = async (
       message,
     } = req.body;
 
-    //Validates referenced property to obtain pricing information.
+    //validates referenced property to obtain pricing information
     const selectedProperty = await prisma.property.findUnique({
       where: { id: propertyId },
       select: { pricePerMonth: true, securityDeposit: true },
@@ -120,7 +119,7 @@ export const addApplication = async (
       return;
     }
 
-    //Transaction ensures lease creation occurs before application creation.
+    //transaction ensures lease creation occurs before application creation
     const newApplication = await prisma.$transaction(async (prisma) => {
       const lease = await prisma.lease.create({
         data: {
@@ -163,8 +162,8 @@ export const addApplication = async (
   }
 };
 
-//Updates an application's status and performs related lease/property updates.
-//Approval creates a new lease and associates the tenant with the property.
+//updates an application's status and performs related lease/property updates
+//approval creates a new lease and associates the tenant with the propert
 export const setApplicationStatus = async (
   req: Request,
   res: Response
@@ -198,7 +197,7 @@ export const setApplicationStatus = async (
         },
       });
 
-      //Links tenant to property for active residence tracking.
+      //links tenant to property for active residence tracking
       await prisma.property.update({
         where: { id: application.propertyId },
         data: {
@@ -206,7 +205,7 @@ export const setApplicationStatus = async (
         },
       });
 
-      //Sync application with its new lease.
+      //sync application with its new lease
       await prisma.application.update({
         where: { id: Number(id) },
         data: { status, leaseId: newLease.id },
@@ -217,14 +216,14 @@ export const setApplicationStatus = async (
         },
       });
     } else {
-      //Handles denial or any non-approval state.
+      //handles denial or any non-approval state
       await prisma.application.update({
         where: { id: Number(id) },
         data: { status },
       });
     }
 
-    //Final fetch ensures the response reflects the most recent data.
+    //final fetch ensures the response reflects the most recent data
     const updatedApplication = await prisma.application.findUnique({
       where: { id: Number(id) },
       include: {

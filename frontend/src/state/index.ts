@@ -1,16 +1,15 @@
-//Redux slice for global UI and filter state.
+//redux slice for global UI and filter state.
 
-//Manages global application state including search filters,
+//manages global application state including search filters,
 //filter modal visibility, and property listing view mode. Provides reducers for
 //updating filter values, toggling UI elements, and switching between grid and
 //list layouts. Ensures structured and centralized state control.
 
 
-//Third-party libraries
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 
-//Types last
+//types last
 export interface FiltersState {
   location: string;
   beds: string;
@@ -29,8 +28,8 @@ interface InitialStateTypes {
   viewMode: 'grid' | 'list';
 }
 
-//Initial state establishing default filter values and UI state.
-//Coordinates centered on Los Angeles to provide a default search region.
+//initial state establishing default filter values and UI state.
+//coordinates centered on Los Angeles to provide a default search region.
 export const initialState: InitialStateTypes = {
   filters: {
     location: 'Los Angeles',
@@ -47,23 +46,23 @@ export const initialState: InitialStateTypes = {
   viewMode: 'grid',
 };
 
-//Global slice encapsulating state logic for filters, UI toggles, and layout mode.
-//Reducers ensure predictable state updates following Redux Toolkit conventions.
+//global slice encapsulating state logic for filters, UI toggles, and layout mode.
+//reducers ensure predictable state updates following Redux Toolkit conventions.
 export const globalSlice = createSlice({
   name: 'global',
   initialState,
   reducers: {
-    //Merges provided filter updates into existing filter state.
+    //merges provided filter updates into existing filter state.
     setFilters: (state, action: PayloadAction<Partial<FiltersState>>) => {
       state.filters = { ...state.filters, ...action.payload };
     },
 
-    //Toggles the full filter panel. Helpful for controlling layout visibility.
+    //toggles the full filter panel. Helpful for controlling layout visibility.
     toggleFiltersFullOpen: (state) => {
       state.isFiltersFullOpen = !state.isFiltersFullOpen;
     },
 
-    //Updates the view mode between grid and list formats.
+    //updates the view mode between grid and list formats.
     setViewMode: (state, action: PayloadAction<'grid' | 'list'>) => {
       state.viewMode = action.payload;
     },

@@ -9,17 +9,26 @@ import { fileURLToPath } from "url";
 
 const prisma = new PrismaClient();
 
+
+
+
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+
 
 function toPascalCase(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+
+
+
 function toCamelCase(str: string): string {
   return str.charAt(0).toLowerCase() + str.slice(1);
 }
+
 
 async function insertLocationData(locations: any[]) {
   for (const location of locations) {
@@ -58,6 +67,11 @@ async function resetSequence(modelName: string) {
   );
   console.log(`Reset sequence for ${modelName} to ${nextId}`);
 }
+
+
+
+
+
 
 async function deleteAllData(orderedFileNames: string[]) {
   const modelNames = orderedFileNames.map((fileName) => {

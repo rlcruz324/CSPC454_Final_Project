@@ -19,7 +19,7 @@ const PropertyDetails = ({ propertyId }: PropertyDetailsProps) => {
 
   return (
     <div className="mb-6">
-      {/* Amenities */}
+      {/* amenities */}
       <div>
         <h2 className="text-xl font-semibold my-3">Property Amenities</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
@@ -40,7 +40,7 @@ const PropertyDetails = ({ propertyId }: PropertyDetailsProps) => {
         </div>
       </div>
 
-      {/* Highlights */}
+      {/* highlights */}
       <div className="mt-12 mb-16">
         <h3 className="text-xl font-semibold text-primary-800 dark:text-primary-100">
           Highlights
@@ -64,7 +64,7 @@ const PropertyDetails = ({ propertyId }: PropertyDetailsProps) => {
         </div>
       </div>
 
-      {/* Tabs Section */}
+      {/* tabs section */}
       <div>
         <h3 className="text-xl font-semibold text-primary-800 dark:text-primary-100 mb-5">
           Fees and Policies

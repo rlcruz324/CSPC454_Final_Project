@@ -5,7 +5,7 @@ import DiscoverSection from './PlatformHighlights'
 import CallToActionSection from './ActionSection'
 import FooterSection from './SiteFooter'
 
-// Use /landing-page to see in browser since that is the name of the folder
+//use /landing-page to see in browser since that is the name of the folder
 const LandingPage = () => {
   return (
     <main>

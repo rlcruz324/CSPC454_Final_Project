@@ -2,71 +2,71 @@
   {
     "id": 1,
     "cognitoId": "010be580-60a1-70ae-780e-18a6fd94ad32",
-    "name": "John Smith",
-    "email": "john.smith@example.com",
+    "name": "James T. Kirk",
+    "email": "james.kirk@example.com",
     "phoneNumber": "+1 (555) 123-4567"
   },
   {
     "id": 2,
     "cognitoId": "us-east-2:23456789-90ab-cdef-1234-567890abcdef",
-    "name": "Sarah Johnson",
-    "email": "sarah.johnson@example.com",
+    "name": "Spock",
+    "email": "spock@example.com",
     "phoneNumber": "+1 (555) 987-6543"
   },
   {
     "id": 3,
     "cognitoId": "us-east-2:34567890-90ab-cdef-1234-567890abcdef",
-    "name": "Michael Brown",
-    "email": "michael.brown@example.com",
+    "name": "Leonard McCoy",
+    "email": "leonard.mccoy@example.com",
     "phoneNumber": "+1 (555) 456-7890"
   },
   {
     "id": 4,
     "cognitoId": "us-east-2:45678901-90ab-cdef-1234-567890abcdef",
-    "name": "Emily Davis",
-    "email": "emily.davis@example.com",
+    "name": "Nyota Uhura",
+    "email": "nyota.uhura@example.com",
     "phoneNumber": "+1 (555) 234-5678"
   },
   {
     "id": 5,
     "cognitoId": "us-east-2:56789012-90ab-cdef-1234-567890abcdef",
-    "name": "Robert Wilson",
-    "email": "robert.wilson@example.com",
+    "name": "Montgomery Scott",
+    "email": "montgomery.scott@example.com",
     "phoneNumber": "+1 (555) 876-5432"
   },
   {
     "id": 6,
     "cognitoId": "us-east-2:67890123-90ab-cdef-1234-567890abcdef",
-    "name": "Lisa Thompson",
-    "email": "lisa.thompson@example.com",
+    "name": "Hikaru Sulu",
+    "email": "hikaru.sulu@example.com",
     "phoneNumber": "+1 (555) 345-6789"
   },
   {
     "id": 7,
     "cognitoId": "us-east-2:78901234-90ab-cdef-1234-567890abcdef",
-    "name": "Daniel Martinez",
-    "email": "daniel.martinez@example.com",
+    "name": "Pavel Chekov",
+    "email": "pavel.chekov@example.com",
     "phoneNumber": "+1 (555) 789-0123"
   },
   {
     "id": 8,
     "cognitoId": "us-east-2:89012345-90ab-cdef-1234-567890abcdef",
-    "name": "Olivia Garcia",
-    "email": "olivia.garcia@example.com",
+    "name": "Christine Chapel",
+    "email": "christine.chapel@example.com",
     "phoneNumber": "+1 (555) 678-9012"
   },
   {
     "id": 9,
     "cognitoId": "us-east-2:90123456-90ab-cdef-1234-567890abcdef",
-    "name": "Ethan Rodriguez",
-    "email": "ethan.rodriguez@example.com",
+    "name": "Janice Rand",
+    "email": "janice.rand@example.com",
     "phoneNumber": "+1 (555) 567-8901"
   },
   {
     "id": 10,
     "cognitoId": "us-east-2:01234567-90ab-cdef-1234-567890abcdef",
-    "name": "Sophia Kim",
-    "email": "sophia.kim@example.com",
+    "name": "Sarek",
+    "email": "sarek@example.com",
     "phoneNumber": "+1 (555) 456-7890"
   }
 ]

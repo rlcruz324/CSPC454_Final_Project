@@ -1,12 +1,10 @@
-//Property controller providing retrieval, filtering, and creation logic.
-//Handles complex property queries with dynamic filters, retrieves individual
-//properties with geographic data, and creates new property records with S3 photo uploads,
+//property controller providing retrieval, filtering, and creation logic
+//gandles complex property queries with dynamic filters, retrieves individual
+//properties with geographic data, and creates new property records with S3 photo uploads
 //geocoding, location creation, and database persistence via Prisma ORM. Includes spatial
-//processing, external API calls, and structured responses.
+//processing, external API calls, and structured responses
 
-//React framework imports
 
-//Third-party libraries
 import { Request, Response } from 'express';
 import { PrismaClient, Prisma } from '@prisma/client';
 import { wktToGeoJSON } from '@terraformer/wkt';
@@ -14,19 +12,18 @@ import { S3Client } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
 import axios from 'axios';
 
-//project modules (lib, utils, state, constants)
 import { Location } from '@prisma/client';
 
 //prisma client instance for database access.
 const prisma = new PrismaClient();
 
-//AWS S3 client configuration for uploading property photos.
+//AWS S3 client configuration for uploading property photos
 const s3Client = new S3Client({
   region: process.env.AWS_REGION,
 });
 
-//retrieves multiple properties with dynamic filtering based on query parameters.
-//builds a raw SQL query using Prisma.sql, allowing expressive conditions and spatial operations.
+//retrieves multiple properties with dynamic filtering based on query parameters
+//builds a raw SQL query using Prisma.sql, allowing expressive conditions and spatial operations
 export const listProperties = async (
   req: Request,
   res: Response
@@ -70,7 +67,7 @@ export const listProperties = async (
       );
     }
 
-    //Bedroom and bathroom filters.
+    //bedroom and bathroom filters
     if (beds && beds !== 'any') {
       whereConditions.push(Prisma.sql`p.beds >= ${Number(beds)}`);
     }
@@ -79,7 +76,7 @@ export const listProperties = async (
       whereConditions.push(Prisma.sql`p.baths >= ${Number(baths)}`);
     }
 
-    // Square footage filters.
+    //square footage filters
     if (squareFeetMin) {
       whereConditions.push(
         Prisma.sql`p."squareFeet" >= ${Number(squareFeetMin)}`
@@ -92,20 +89,20 @@ export const listProperties = async (
       );
     }
 
-    //Property type filter (enum).
+    //property type filter (enum)
     if (propertyType && propertyType !== 'any') {
       whereConditions.push(
         Prisma.sql`p."propertyType" = ${propertyType}::"PropertyType"`
       );
     }
 
-    //Amenities array filter using PostgreSQL array containment.
+    //amenities array filter using PostgreSQL array containment
     if (amenities && amenities !== 'any') {
       const amenitiesArray = (amenities as string).split(',');
       whereConditions.push(Prisma.sql`p.amenities @> ${amenitiesArray}`);
     }
 
-    //Ensures a property is available before a given date.
+    //ensures a property is available before a given date
     if (availableFrom && availableFrom !== 'any') {
       const availableFromDate =
         typeof availableFrom === 'string' ? availableFrom : null;
@@ -123,7 +120,7 @@ export const listProperties = async (
       }
     }
 
-    //Spatial radius filter using ST_DWithin.
+    //spatial radius filter using ST_DWithin
     if (latitude && longitude) {
       const lat = parseFloat(latitude as string);
       const lng = parseFloat(longitude as string);
@@ -139,7 +136,7 @@ export const listProperties = async (
       );
     }
 
-    //Complete SQL query assembling conditions and joining location data.
+    //complete SQL query assembling conditions and joining location data
     const completeQuery = Prisma.sql`
       SELECT 
         p.*,
@@ -174,8 +171,8 @@ export const listProperties = async (
   }
 };
 
-//Retrieves a single property with its resolved geographic coordinates.
-//Converts WKT geometry from the database into standard longitude/latitude format.
+//retrieves a single property with its resolved geographic coordinates
+//converts WKT geometry from the database into standard longitude/latitude format
 export const fetchPropertyByID = async (
   req: Request,
   res: Response
@@ -218,10 +215,10 @@ export const fetchPropertyByID = async (
 };
 
 
-//Creates a property, uploads photos to S3, performs geocoding, inserts a location,
-//and saves final property data to the database. 
-//Handles array parsing, numeric
-//conversions, and spatial data creation.
+//creates a property, uploads photos to S3, performs geocoding, inserts a location
+//and saves final property data to the database 
+//handles array parsing, numeric
+//conversions, and spatial data creation
 //this code is a probelm because when it uploads the images to the s3 bucket it gives it a broken image
 //but why?
 export const addProperty = async (req: Request, res: Response): Promise<void> => {
@@ -231,7 +228,7 @@ export const addProperty = async (req: Request, res: Response): Promise<void> =>
 
     console.log('Received property creation request:', { address, city, state, country, postalCode, managerCognitoId, propertyData });
 
-    // Upload photos
+    //ppload photos
     const photoUrls = await Promise.all(
       files.map(async (file) => {
         const uploadParams = {
@@ -252,7 +249,7 @@ export const addProperty = async (req: Request, res: Response): Promise<void> =>
 
     console.log('All photos uploaded:', photoUrls);
 
-    // Geocoding
+    //geocoding
     const geocodingUrl = `https://nominatim.openstreetmap.org/search?${new URLSearchParams({
       street: address,
       city,
@@ -277,7 +274,7 @@ export const addProperty = async (req: Request, res: Response): Promise<void> =>
 
     console.log('Geocoded coordinates:', { longitude, latitude });
 
-    // Insert location
+    //insert location
     const [location] = await prisma.$queryRaw<Location[]>`
       INSERT INTO "Location" (address, city, state, country, "postalCode", coordinates)
       VALUES (${address}, ${city}, ${state}, ${country}, ${postalCode}, ST_SetSRID(ST_MakePoint(${longitude}, ${latitude}), 4326))
@@ -286,7 +283,7 @@ export const addProperty = async (req: Request, res: Response): Promise<void> =>
 
     console.log('Inserted location:', location);
 
-    // Create property
+    //create property
     const newProperty = await prisma.property.create({
       data: {
         ...propertyData,

@@ -1,10 +1,15 @@
 "use client";
 
+//property creation page used by managers to add new property listings
+
 import { CustomFormField } from "@/components/CustomFormField";
 import ContentHeader from "@/components/ContentHeader";
 import { Form } from "@/components/ui/form";
 import { PropertyFormData, propertySchema } from "@/lib/schemas";
-import { useCreatePropertyMutation as useCreateNewPropertyMutation, useGetAuthUserQuery as useFetchAuthenticatedUserQuery } from "@/state/api";
+import {
+  useCreatePropertyMutation as useCreateNewPropertyMutation,
+  useGetAuthUserQuery as useFetchAuthenticatedUserQuery,
+} from "@/state/api";
 import { AmenityEnum, HighlightEnum, PropertyTypeEnum } from "@/lib/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
@@ -12,9 +17,13 @@ import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 
 const PropertyCreationPage = () => {
+  //mutation used to submit new property data to the backend
   const [createProperty] = useCreateNewPropertyMutation();
+
+  //fetches authenticated manager data for ownership association
   const { data: authUser } = useFetchAuthenticatedUserQuery();
 
+  //initializes react hook form with zod validation and default values
   const form = useForm<PropertyFormData>({
     resolver: zodResolver(propertySchema),
     defaultValues: {
@@ -39,43 +48,56 @@ const PropertyCreationPage = () => {
     },
   });
 
+  //handles form submission and transforms data into multipart form data
   const handlePropertySubmission = async (data: PropertyFormData) => {
+    //ensures manager identity exists before creating a property
     if (!authUser?.cognitoInfo?.userId) {
       throw new Error("No manager ID found");
     }
 
+    //builds form data payload to support file uploads
     const managerFormData = new FormData();
+
     Object.entries(data).forEach(([key, value]) => {
+      //handles photo uploads separately to support multiple files
       if (key === "photoUrls") {
         const files = value as File[];
         files.forEach((file: File) => {
           managerFormData.append("photos", file);
         });
-      } else if (Array.isArray(value)) {
+      }
+      //stringifies arrays for backend parsing
+      else if (Array.isArray(value)) {
         managerFormData.append(key, JSON.stringify(value));
-      } else {
+      }
+      //appends all other scalar values as strings
+      else {
         managerFormData.append(key, String(value));
       }
     });
 
+    //associates property with the authenticated manager
     managerFormData.append("managerCognitoId", authUser.cognitoInfo.userId);
 
+    //submits property creation request
     await createProperty(managerFormData);
   };
 
   return (
     <div className="dashboard-container">
+      {/* page header describing the purpose of this form */}
       <ContentHeader
         title="Add New Property"
         subtitle="Create a new property listing with detailed information"
       />
+
       <div className="bg-white rounded-xl p-6">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handlePropertySubmission)}
             className="p-4 space-y-10"
           >
-            {/* Basic Information */}
+            {/* basic property identity fields */}
             <div>
               <h2 className="text-lg font-semibold mb-4">Basic Information</h2>
               <div className="space-y-4">
@@ -90,7 +112,7 @@ const PropertyCreationPage = () => {
 
             <hr className="my-6 border-gray-200" />
 
-            {/* Fees */}
+            {/* pricing and required fees */}
             <div className="space-y-6">
               <h2 className="text-lg font-semibold mb-4">Fees</h2>
               <CustomFormField
@@ -114,7 +136,7 @@ const PropertyCreationPage = () => {
 
             <hr className="my-6 border-gray-200" />
 
-            {/* Property Details */}
+            {/* physical and categorical property attributes */}
             <div className="space-y-6">
               <h2 className="text-lg font-semibold mb-4">Property Details</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -161,7 +183,7 @@ const PropertyCreationPage = () => {
 
             <hr className="my-6 border-gray-200" />
 
-            {/* Amenities and Highlights */}
+            {/* selectable amenities and highlights for listing display */}
             <div>
               <h2 className="text-lg font-semibold mb-4">
                 Amenities and Highlights
@@ -190,7 +212,7 @@ const PropertyCreationPage = () => {
 
             <hr className="my-6 border-gray-200" />
 
-            {/* Photos */}
+            {/* property photo uploads */}
             <div>
               <h2 className="text-lg font-semibold mb-4">Photos</h2>
               <CustomFormField
@@ -203,7 +225,7 @@ const PropertyCreationPage = () => {
 
             <hr className="my-6 border-gray-200" />
 
-            {/* Additional Information */}
+            {/* location and address information */}
             <div className="space-y-6">
               <h2 className="text-lg font-semibold mb-4">
                 Additional Information
@@ -225,6 +247,7 @@ const PropertyCreationPage = () => {
               <CustomFormField name="country" label="Country" />
             </div>
 
+            {/* submits the form and triggers property creation */}
             <Button
               type="submit"
               className="bg-primary-700 text-white w-full mt-8"

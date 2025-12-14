@@ -1,18 +1,16 @@
-//Manager controller for retrieving, creating, updating, and listing manager properties.
-//Provides endpoints for manager lookup, manager creation, manager updates, and
-//retrieval of all properties managed by a specific manager. Enhances property data with geographic
-//coordinate conversion, integrates Prisma ORM operations, and returns structured JSON responses.
-
+//manager controller for retrieving creating updating and listing manager properties
+//provides endpoints for manager lookup manager creation manager updates and
+//retrieval of all properties managed by a specific manager enhances property data with geographic
+//coordinate conversion integrates prisma orm operations and returns structured json responses
 
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { wktToGeoJSON } from '@terraformer/wkt';
 
-
-//Prisma client instance for database access throughout the controller.
+//prisma client instance for database access throughout the controller
 const prisma = new PrismaClient();
 
-//Retrieves a single manager by Cognito ID. Used for displaying or validating manager profile data.
+//retrieves a single manager by cognito id used for displaying or validating manager profile data
 export const fetchManger = async (
   req: Request,
   res: Response
@@ -36,8 +34,8 @@ export const fetchManger = async (
   }
 };
 
-//Creates a new manager record using basic profile fields.
-//Typically run during first-time authentication or onboarding.
+//creates a new manager record using basic profile fields
+//typically run during first time authentication or onboarding
 export const addManager = async (
   req: Request,
   res: Response
@@ -62,7 +60,7 @@ export const addManager = async (
   }
 };
 
-//Updates manager information. Supports editing of name, email, or phone number.
+//updates manager information supports editing of name email or phone number
 export const editManager = async (
   req: Request,
   res: Response
@@ -88,8 +86,8 @@ export const editManager = async (
   }
 };
 
-//Retrieves all properties belonging to a manager and converts their spatial WKT
-//coordinates to standard longitude/latitude for frontend use.
+//retrieves all properties belonging to a manager and converts their spatial wkt
+//coordinates to standard longitude latitude for frontend use
 export const fetchManagerProperties = async (
   req: Request,
   res: Response

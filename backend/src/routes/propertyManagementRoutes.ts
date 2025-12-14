@@ -4,9 +4,9 @@
 
 //routes for retrieving, creating, and managing property
 //data. Includes authorization checks, file upload handling using multer memory
-//storage, and controller bindings for property operations.
+//storage, and controller bindings for property operations
 
-//imports
+
 import express from 'express';
 import multer from 'multer';
 import { requireRole } from '../middleware/requireRolesMiddleware';
@@ -19,8 +19,8 @@ import {
 } from '../controllers/propertyManagementControllers';
 
 
-//multer configuration using in-memory storage for temporary photo handling.
-//this allows the controller to process images without writing files to disk.
+//multer configuration using in-memory storage for temporary photo handling
+//this allows the controller to process images without writing files to disk
 //could be why the s3 bucket keeps getting junk in it instead of the actual file
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -29,7 +29,7 @@ const upload = multer({ storage });
 const router = express.Router();
 
 //retrieves a list of all properties.
-//useful for displaying property listings or performing searches.
+//useful for displaying property listings or performing searches
 router.get('/', listProperties);
 
 //retrieves details for a single property identified by its ID.

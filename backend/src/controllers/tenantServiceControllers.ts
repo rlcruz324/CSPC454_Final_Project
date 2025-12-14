@@ -1,18 +1,16 @@
-//Tenant controller for managing tenant profiles, favorites, and residence data.
-//Provides endpoints to retrieve, create, and update tenant records; manage favorite
+//tenant controller for managing tenant profiles, favorites, and residence data
+//provides endpoints to retrieve, create, and update tenant records; manage favorite
 //properties; and retrieve properties a tenant currently resides in. Includes geographic coordinate
-//formatting, Prisma ORM operations, relationship queries, and returned structured JSON responses.
+//formatting, Prisma ORM operations, relationship queries, and returned structured JSON responses
 
-//Third-party libraries
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { wktToGeoJSON } from '@terraformer/wkt';
 
 
-//Prisma client instance for database interactions.
+//prisma client instance for database interactions
 const prisma = new PrismaClient();
 
-//Retrieves a tenant by Cognito ID including favorite properties.
 export const fetchTenant = async (req: Request, res: Response): Promise<void> => {
   try {
     const { cognitoId } = req.params;
@@ -36,7 +34,7 @@ export const fetchTenant = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
-//Creates a new tenant using basic identity and contact information.
+//creates a new tenant using basic identity and contact information
 export const addTenant = async (
   req: Request,
   res: Response
@@ -61,7 +59,7 @@ export const addTenant = async (
   }
 };
 
-//Updates tenant profile details.
+//updates tenant profile details.
 export const fetchTenantInfo = async (
   req: Request,
   res: Response
@@ -87,8 +85,8 @@ export const fetchTenantInfo = async (
   }
 };
 
-//Retrieves properties where the tenant currently resides,
-//converting spatial coordinates into longitude/latitude format.
+//retrieves properties where the tenant currently resides
+//converting spatial coordinates into longitude/latitude format
 export const fetchTenantResidences = async (
   req: Request,
   res: Response
@@ -133,7 +131,7 @@ export const fetchTenantResidences = async (
   }
 };
 
-//Adds a property to a tenant's list of favorites if not already present.
+//adds a property to a tenant's list of favorites if not already present
 export const addTenantFavoriteProperty = async (
   req: Request,
   res: Response
@@ -180,7 +178,7 @@ export const addTenantFavoriteProperty = async (
   }
 };
 
-//Removes a property from a tenant's favorites.
+//removes a property from a tenant's favorites
 export const removeTenantFavoriteProperty = async (
   req: Request,
   res: Response

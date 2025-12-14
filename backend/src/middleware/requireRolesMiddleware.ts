@@ -1,14 +1,14 @@
-//Middleware that checks the user's JWT and only allows 
-//access if their role is permitted.
+//middleware that checks the user's JWT and only allows 
+//access if their role is permitted
 
-//This middleware enforces role-based authorization by reading the JWT from the
-//Authorization header, decoding it, and extracting the user's role. 
-//compares the role in the token against a list of allowed roles for the route. 
-//If the token is missing, invalid, or the user lacks the required role, 
-//the request is rejected with a status code. 
-//When valid, it attaches the user's ID and role to
-//req.user and passes control to the next handler.
-//This is kinda the most important part considering it manages roles and users
+//this middleware enforces role-based authorization by reading the JWT from the
+//authorization header, decoding it, and extracting the user's role
+//compares the role in the token against a list of allowed roles for the route
+//If the token is missing, invalid, or the user lacks the required role
+//the request is rejected with a status code
+//when valid, it attaches the user's ID and role to
+//req.user and passes control to the next handler
+//this is kinda the most important part considering it manages roles and users
 
 
 
