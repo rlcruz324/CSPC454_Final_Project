@@ -765,9 +765,8 @@ i dont think the congnito users are being added to the database...but why not?
 
 Im just going to start over maybe I was rushing the aws setup or something idk
 
-ihateawsihateawsihateaws
+
 i been sitting here for 18 hours!!!!aaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-i should be with my friend comforting her now that her dad passed 
 i wish aws didnt exist 
 
 ec2 commands i need for every reboot
@@ -829,7 +828,11 @@ Made the changes in ec2
 seems like everything is running smoothly
 
 
-
+Somehow i broke it even worse than before and i feel so defeated 
+i think if i ever get it back up an running again that i will just leave it alone 
+i gotta get ready to go to class. i hate how i lose 8 hours of my day to travel and class 
+i really need that time to work on the project ...
+ec2 is being completely unresponsive for an hour
 
 
 
@@ -866,11 +869,7 @@ Issue: shadcn button is too dark to read
 
 
 
-Somehow i broke it even worse than before and i feel so defeated 
-i think if i ever get it back up an running again that i will just leave it alone 
-i gotta get ready to go to class. i hate how i lose 8 hours of my day to travel and class 
-i really need that time to work on the project ...
-ec2 is being completely unresponsive for an hour
+
 
 
 
